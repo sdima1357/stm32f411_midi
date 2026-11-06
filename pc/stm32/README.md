@@ -8,11 +8,11 @@ plumbing live here.
 
 | Item | Size |
 |---|---|
-| Soundbank data (`src/data/*.c`) | ~385 KiB |
+| Soundbank data (`../src/data/*.c`) | ~385 KiB |
 | Synth engine + MIDI parser | ~20 KiB flash |
 | HAL + USB device + startup | ~25-35 KiB flash |
-| **Total flash** | **~430-440 KiB / 512 KiB** |
-| 24 voices + DMA + USB buffers | < 12 KiB RAM / 128 KiB |
+| **Total flash** | **~426 KiB / 512 KiB** |
+| 24 voices + DMA + USB buffers | ~17 KiB RAM / 128 KiB |
 
 The large tables are `const`, so they stay in flash. Do **not** copy them to
 RAM.
@@ -28,68 +28,64 @@ RAM.
 
 Create a project for **STM32F411CEU6** and configure:
 
-### Clock (example: 25 MHz HSE)
+### Clock (25 MHz HSE)
 
 - HSE: crystal/ceramic resonator, 25 MHz (Black Pill boards usually have 25 MHz;
   use 8 MHz and adjust `PLLM`/`PLLI2SM` if yours differs).
-- PLL: `M=25`, `N=384`, `P=4`, `Q=8` -> SYSCLK 96 MHz, USB 48 MHz.
-- PLLI2S: `M=25`, `N=271`, `R=6` -> I2S clock ~45.17 MHz.
+- PLL: `M=25`, `N=192`, `P=2`, `Q=4` -> SYSCLK 96 MHz, USB 48 MHz.
+- PLLI2S: `M=16`, `N=192`, `R=2` -> I2S clock 150 MHz.
 - AHB /1, APB1 /2 (48 MHz), APB2 /1 (96 MHz), flash latency 3 WS.
 
-### I2S2 (master transmit)
+### I2S1 (master transmit)
 
 - Mode: Master TX, Philips standard, 16-bit, 22050 Hz.
 - Pins:
-  - `PB12` -> I2S2_WS
-  - `PB13` -> I2S2_CK
-  - `PB15` -> I2S2_SD
-  - `PC6`  -> I2S2_MCK (only if your DAC/codec needs MCLK)
-- DMA: `DMA1 Stream4`, channel 0, **circular**, half-word, memory increment,
-  peripheral no increment, high priority.
-- Enable the I2S2 global interrupt (needed for the half/full callbacks).
+  - `PA4` -> I2S1_WS
+  - `PA5` -> I2S1_CK
+  - `PA7` -> I2S1_SD
+- DMA: `DMA2 Stream2`, channel 2, **circular**, half-word, memory increment,
+  peripheral no increment, low priority.
+- Enable the `DMA2_Stream2_IRQn` interrupt; the half/full callbacks are driven
+  by the DMA interrupt.
 
-With the PLLI2S values above, CubeMX selects the /64 prescaler for 22050 Hz.
-If your board uses a different HSE, let CubeMX recalculate it and verify the
-audio frequency.
+With the PLLI2S values above, CubeMX reports an actual audio frequency of
+about 22.007 kHz. If your board uses a different HSE, let CubeMX recalculate it
+and verify the audio frequency.
 
 ### USB
 
-- USB_OTG_FS in **Device** mode.
-- Middleware: **USB Device** with the **MIDI** class.
-- Pins `PA11` (DM) and `PA12` (DP).
-- In `usbd_midi_if.c`, forward received packets:
-
-```c
-static int8_t MIDI_Receive(uint8_t *pbuf, uint32_t len)
-{
-    usb_midi_receive(pbuf, len);
-    return 0;
-}
-```
+- USB_OTG_FS, pins `PA11` (DM) and `PA12` (DP); `PA10` (ID) is also configured.
+- The USB stack is **TinyUSB**, not the STM32 USB Device middleware. The role is
+  selected with `USB_MODE` in `Core/Inc/tusb_config.h`.
+- In device mode, `tud_midi_rx_cb()` in `Core/Src/main.c` reads 4-byte USB-MIDI
+  event packets with `tud_midi_packet_read()` and forwards them to
+  `usb_midi_receive()`.
+- In host mode, `tuh_midi_rx_cb()` reads raw MIDI bytes from the keyboard and
+  prints them over UART1.
 
 ## Adding the code
 
-Add these files to the CubeMX project:
+The repository Makefile already builds these files:
 
-- `src/synth.c`, `src/synth.h`
-- `src/data/instruments.c`, `src/data/instruments.h`
-- `src/data/wavetables.c`, `src/data/pcm.c`
-- `stm32/audio_i2s.c`
-- `stm32/usb_midi.c`
-- `stm32/app_main.c`
+- `../src/synth.c`, `../src/synth.h`
+- `../src/data/instruments.c`, `../src/data/instruments.h`
+- `../src/data/wavetables.c`, `../src/data/pcm.c`
+- `audio_i2s.c`
+- `usb_midi.c`
 
-Add `src/` and `src/data/` to the compiler include paths, and link with `-lm`
-(the engine uses `sinf`, `expf`, `powf`).
+Add `../src` and `../src/data` to the compiler include paths, and link with
+`-lm` (the engine uses `sinf`, `expf`, `powf`).
 
-From the generated `main.c`, after `MX_GPIO_Init()`, `MX_DMA_Init()`,
-`MX_I2S2_Init()` and `MX_USB_DEVICE_Init()`, call:
+From the generated `main.c`, after `MX_I2S1_Init()` and `tusb_init()`, call:
 
 ```c
-app_main();
+synth_init();
+audio_init();
+audio_start();
 ```
 
-If `main.c` already calls `MX_USB_DEVICE_Init()`, remove the duplicate call
-from `app_main.c`.
+`app_main.c` is not used by this project; it targets the STM32 USB Device
+middleware and calls `MX_USB_DEVICE_Init()`, which does not exist here.
 
 ## Notes
 
@@ -109,6 +105,8 @@ from `app_main.c`.
 - Sustain pedal (CC64), volume (CC7), expression (CC11), all-notes-off (CC123)
   and reset-controllers (CC121) are supported.
 - Pitch bend range is +/- 2 semitones.
+- USB device mode plays the synth on I2S1. USB host mode currently only decodes
+  and prints keyboard events; it does not drive the synth.
 
 ## Regenerating the soundbank
 
