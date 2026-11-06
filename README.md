@@ -46,3 +46,21 @@ make -j8
 
 See `pc/README.md` for the soundbank generator and PC details, and
 `pc/stm32/README.md` for the board integration notes.
+
+## MAX98357 wiring
+
+The MAX98357 does not require a Master Clock (MCLK), so only 3 signal lines
+from the I2S1 peripheral are needed. Assuming the standard pin mappings (as
+configured in STM32CubeMX), use the following wiring scheme:
+
+| MAX98357 Pin | Pin Function  | STM32F411 Pin (Default I2S1) | Description                                                          |
+| ------------ | ------------- | ---------------------------- | -------------------------------------------------------------------- |
+| BCLK         | Bit Clock     | PA5 (I2S1_CK)                | Controls the timing of each audio data bit.                          |
+| LRC / WS     | Word Select   | PA4 (I2S1_WS)                | Defines Left/Right channels (matches Sample Rate).                   |
+| DIN          | Data In       | PA7 (I2S1_SD)                | Serial audio data line.                                              |
+| GND          | Ground        | GND                          | Common ground reference.                                             |
+| VIN          | Power Supply  | 3.3V or 5V                   | Use a 5V supply to achieve the maximum 3.2W output power.            |
+
+Note: You can leave the GAIN and SD pins unconnected on the breakout board by
+default. This sets the chip to a safe 9dB gain and mixes both Left and Right
+digital channels into a single mono output.
