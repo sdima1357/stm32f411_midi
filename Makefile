@@ -58,6 +58,12 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2s_ex.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/sysmem.c \
 Core/Src/syscalls.c \
+pc/src/synth.c \
+pc/src/data/instruments.c \
+pc/src/data/wavetables.c \
+pc/src/data/pcm.c \
+pc/stm32/audio_i2s.c \
+pc/stm32/usb_midi.c \
 tinyusb/src/tusb.c \
 tinyusb/src/common/tusb_fifo.c \
 tinyusb/src/device/usbd.c \
@@ -135,6 +141,8 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
+-Ipc/src \
+-Ipc/stm32 \
 -I/home/dima/hardware/tinyusb/src
 
 

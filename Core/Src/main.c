@@ -27,6 +27,8 @@
 //----- USB role switch (USB_MODE_HOST / USB_MODE_DEVICE) is set in
 //----- Core/Inc/tusb_config.h, it applies to the whole TinyUSB stack.
 #include "tusb.h"
+#include "synth.h"
+#include "synth_stm32.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -201,6 +203,10 @@ int main(void)
 #endif
   printf("inited ok\n");
  cr_flush();
+
+  synth_init();
+  audio_init();
+  audio_start();
 
   /* USER CODE END 2 */
 
@@ -665,15 +671,29 @@ void tud_umount_cb(void) {
   printf("USB unmounted\r\n");
 }
 
+static uint32_t midi_packet_len(uint8_t cin) {
+  switch (cin) {
+    case 0x05: // SysEx end, 1 byte
+    case 0x0F: // single byte
+      return 1;
+    case 0x02: // system common, 2 bytes
+    case 0x06: // SysEx end, 2 bytes
+    case 0x0C: // program change
+    case 0x0D: // channel pressure
+      return 2;
+    default:
+      return 3;
+  }
+}
+
 void tud_midi_rx_cb(uint8_t itf) {
   (void) itf;
-  uint8_t buffer[64];
-  uint32_t bytes_read;
+  uint8_t packet[4];
 
-  // read everything available and print it, then echo back to the host
-  while ((bytes_read = tud_midi_stream_read(buffer, sizeof(buffer))) > 0) {
-    midi_print_bytes(0, buffer, bytes_read);
-   // tud_midi_stream_write(0, buffer, bytes_read);
+  // drain the FIFO one 4-byte USB-MIDI event packet at a time
+  while (tud_midi_packet_read(packet)) {
+    usb_midi_receive(packet, sizeof(packet));
+    //midi_print_bytes(0, packet + 1, midi_packet_len(packet[0] & 0x0F));
   }
 }
 #endif /* USB_MODE */
