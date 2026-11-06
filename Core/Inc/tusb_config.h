@@ -15,12 +15,12 @@ extern "C" {
 #endif
 
 //----- USB ROLE SWITCH -----------------------------------------------------
-// USB_MODE_HOST   = print messages from a connected MIDI keyboard
-// USB_MODE_DEVICE = appear as a USB MIDI instrument, print messages sent by the PC
+// USB_MODE_HOST   = act as USB host for a MIDI keyboard and play it on I2S1
+// USB_MODE_DEVICE = appear as a USB MIDI instrument and play PC MIDI on I2S1
 // Change the value below to switch roles.
 //-----------------------------------------------------------------------------
 #ifndef USB_MODE
-#define USB_MODE            USB_MODE_DEVICE
+#define USB_MODE            USB_MODE_HOST
 #endif
 
 #ifndef USB_MODE_HOST

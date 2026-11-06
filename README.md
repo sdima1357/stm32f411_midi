@@ -14,9 +14,18 @@ The USB role is selected with `USB_MODE` in `Core/Inc/tusb_config.h`:
 
 1. `USB_MODE_DEVICE` - the board appears as a USB-MIDI device. MIDI events
    received from the PC are synthesized and played on I2S1 (PA4/PA5/PA7).
-2. `USB_MODE_HOST` - the board acts as a USB host for a MIDI keyboard. Events
-   are decoded and printed over UART1; audio playback is not wired in this
-   mode.
+2. `USB_MODE_HOST` - the board acts as a USB host for a MIDI keyboard. MIDI
+   events are synthesized and played on I2S1 and printed over UART1.
+
+The checked-in configuration defaults to `USB_MODE_HOST`. Change `USB_MODE` in
+`Core/Inc/tusb_config.h` to switch roles, then run `make clean` before
+rebuilding.
+
+## USB host mode
+
+Connect the MIDI keyboard through a USB OTG adapter. The STM32F411 does not
+power a keyboard from the on-board USB connector in host mode, so use a powered
+hub or supply 5 V to the host port. Then build and flash normally.
 
 ## Build and flash
 

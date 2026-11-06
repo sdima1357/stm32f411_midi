@@ -439,6 +439,7 @@ uint32_t tusb_time_millis_api(void) {
 }
 
 //----- decode and print a stream of classic MIDI1 bytes -----//
+__attribute__((unused))
 static void midi_print_bytes(uint8_t cable, const uint8_t *data, uint32_t len) {
   static uint8_t running_status = 0;
 
@@ -553,6 +554,22 @@ static void midi_print_bytes(uint8_t cable, const uint8_t *data, uint32_t len) {
   }
 }
 
+__attribute__((unused))
+static uint32_t midi_packet_len(uint8_t cin) {
+  switch (cin) {
+    case 0x05: // SysEx end, 1 byte
+    case 0x0F: // single byte
+      return 1;
+    case 0x02: // system common, 2 bytes
+    case 0x06: // SysEx end, 2 bytes
+    case 0x0C: // program change
+    case 0x0D: // channel pressure
+      return 2;
+    default:
+      return 3;
+  }
+}
+
 #if (USB_MODE == USB_MODE_HOST)
 //----- TinyUSB Host callbacks -----//
 void tuh_midi_mount_cb(uint8_t idx, const tuh_midi_mount_cb_t *mount_cb_data) {
@@ -566,13 +583,13 @@ void tuh_midi_umount_cb(uint8_t idx) {
 
 void tuh_midi_rx_cb(uint8_t idx, uint32_t xferred_bytes) {
   (void) xferred_bytes;
-  uint8_t buffer[64];
-  uint8_t cable_num = 0;
-  uint32_t bytes_read;
+  uint8_t packet[4];
 
-  // drain the FIFO, a single read stops at a cable change or when the buffer is full
-  while ((bytes_read = tuh_midi_stream_read(idx, &cable_num, buffer, sizeof(buffer))) > 0) {
-    midi_print_bytes(cable_num, buffer, bytes_read);
+  // drain the FIFO one 4-byte USB-MIDI event packet at a time
+  while (tuh_midi_packet_read(idx, packet)) {
+    usb_midi_receive(packet, sizeof(packet));
+    midi_print_bytes((packet[0] >> 4) & 0x0F, packet + 1,
+                     midi_packet_len(packet[0] & 0x0F));
   }
 }
 
@@ -669,21 +686,6 @@ void tud_mount_cb(void) {
 
 void tud_umount_cb(void) {
   printf("USB unmounted\r\n");
-}
-
-static uint32_t midi_packet_len(uint8_t cin) {
-  switch (cin) {
-    case 0x05: // SysEx end, 1 byte
-    case 0x0F: // single byte
-      return 1;
-    case 0x02: // system common, 2 bytes
-    case 0x06: // SysEx end, 2 bytes
-    case 0x0C: // program change
-    case 0x0D: // channel pressure
-      return 2;
-    default:
-      return 3;
-  }
 }
 
 void tud_midi_rx_cb(uint8_t itf) {

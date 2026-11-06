@@ -56,12 +56,17 @@ and verify the audio frequency.
 
 - USB_OTG_FS, pins `PA11` (DM) and `PA12` (DP); `PA10` (ID) is also configured.
 - The USB stack is **TinyUSB**, not the STM32 USB Device middleware. The role is
-  selected with `USB_MODE` in `Core/Inc/tusb_config.h`.
+  selected with `USB_MODE` in `Core/Inc/tusb_config.h`:
+  `USB_MODE_HOST` for a MIDI keyboard, `USB_MODE_DEVICE` to appear as a MIDI
+  instrument to a PC.
 - In device mode, `tud_midi_rx_cb()` in `Core/Src/main.c` reads 4-byte USB-MIDI
   event packets with `tud_midi_packet_read()` and forwards them to
   `usb_midi_receive()`.
-- In host mode, `tuh_midi_rx_cb()` reads raw MIDI bytes from the keyboard and
-  prints them over UART1.
+- In host mode, `tuh_midi_rx_cb()` reads 4-byte USB-MIDI event packets with
+  `tuh_midi_packet_read()`, forwards them to `usb_midi_receive()`, and prints
+  them over UART1.
+- Host mode needs a USB OTG adapter and external/powered-hub 5 V for the
+  keyboard; the board's USB connector is normally wired for device mode.
 
 ## Adding the code
 
@@ -105,8 +110,8 @@ middleware and calls `MX_USB_DEVICE_Init()`, which does not exist here.
 - Sustain pedal (CC64), volume (CC7), expression (CC11), all-notes-off (CC123)
   and reset-controllers (CC121) are supported.
 - Pitch bend range is +/- 2 semitones.
-- USB device mode plays the synth on I2S1. USB host mode currently only decodes
-  and prints keyboard events; it does not drive the synth.
+- Both USB device and host modes feed received MIDI into the synth and play it
+  on I2S1. Host mode additionally prints keyboard events over UART1.
 
 ## Regenerating the soundbank
 
