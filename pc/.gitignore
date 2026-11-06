@@ -1,0 +1,6 @@
+build/
+gmsynth
+*.wav
+*.o
+__pycache__/
+*.pyc
