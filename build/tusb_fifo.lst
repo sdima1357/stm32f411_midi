@@ -1,0 +1,1578 @@
+ARM GAS  /tmp/ccUpsPzb.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"tusb_fifo.c"
+  16              		.text
+  17              		.section	.text.tu_fifo_config,"ax",%progbits
+  18              		.align	1
+  19              		.p2align 2,,3
+  20              		.global	tu_fifo_config
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	tu_fifo_config:
+  26              		@ args = 0, pretend = 0, frame = 0
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28              		@ link register save eliminated.
+  29 0000 B2F5004F 		cmp	r2, #32768
+  30 0004 0AD8     		bhi	.L3
+  31 0006 4FF0000C 		mov	ip, #0
+  32 000a A0F80AC0 		strh	ip, [r0, #10]	@ movhi
+  33 000e 0160     		str	r1, [r0]
+  34 0010 8280     		strh	r2, [r0, #4]	@ movhi
+  35 0012 8371     		strb	r3, [r0, #6]
+  36 0014 A0F808C0 		strh	ip, [r0, #8]	@ movhi
+  37 0018 0120     		movs	r0, #1
+  38 001a 7047     		bx	lr
+  39              	.L3:
+  40 001c 0020     		movs	r0, #0
+  41 001e 7047     		bx	lr
+  43              		.section	.text.tu_fifo_clear,"ax",%progbits
+  44              		.align	1
+  45              		.p2align 2,,3
+  46              		.global	tu_fifo_clear
+  47              		.syntax unified
+  48              		.thumb
+  49              		.thumb_func
+  51              	tu_fifo_clear:
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+  54              		@ link register save eliminated.
+  55 0000 0023     		movs	r3, #0
+  56 0002 4381     		strh	r3, [r0, #10]	@ movhi
+  57 0004 0381     		strh	r3, [r0, #8]	@ movhi
+  58 0006 7047     		bx	lr
+  60              		.section	.text.tu_fifo_set_overwritable,"ax",%progbits
+  61              		.align	1
+ARM GAS  /tmp/ccUpsPzb.s 			page 2
+
+
+  62              		.p2align 2,,3
+  63              		.global	tu_fifo_set_overwritable
+  64              		.syntax unified
+  65              		.thumb
+  66              		.thumb_func
+  68              	tu_fifo_set_overwritable:
+  69              		@ args = 0, pretend = 0, frame = 0
+  70              		@ frame_needed = 0, uses_anonymous_args = 0
+  71              		@ link register save eliminated.
+  72 0000 8379     		ldrb	r3, [r0, #6]	@ zero_extendqisi2
+  73 0002 8B42     		cmp	r3, r1
+  74 0004 18BF     		it	ne
+  75 0006 8171     		strbne	r1, [r0, #6]
+  76 0008 7047     		bx	lr
+  78 000a 00BF     		.section	.text.tu_hwfifo_write,"ax",%progbits
+  79              		.align	1
+  80              		.p2align 2,,3
+  81              		.global	tu_hwfifo_write
+  82              		.syntax unified
+  83              		.thumb
+  84              		.thumb_func
+  86              	tu_hwfifo_write:
+  87              		@ args = 0, pretend = 0, frame = 8
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89 0000 30B5     		push	{r4, r5, lr}
+  90 0002 0446     		mov	r4, r0
+  91 0004 83B0     		sub	sp, sp, #12
+  92 0006 ABB1     		cbz	r3, .L13
+  93 0008 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+  94 000a 0346     		mov	r3, r0
+  95 000c 04E0     		b	.L19
+  96              	.L11:
+  97 000e 0D68     		ldr	r5, [r1]
+  98 0010 2560     		str	r5, [r4]
+  99 0012 D21A     		subs	r2, r2, r3
+ 100 0014 92B2     		uxth	r2, r2
+ 101 0016 0144     		add	r1, r1, r0
+ 102              	.L19:
+ 103 0018 9342     		cmp	r3, r2
+ 104 001a F8D9     		bls	.L11
+ 105 001c 0AB9     		cbnz	r2, .L20
+ 106 001e 03B0     		add	sp, sp, #12
+ 107              		@ sp needed
+ 108 0020 30BD     		pop	{r4, r5, pc}
+ 109              	.L20:
+ 110 0022 0023     		movs	r3, #0
+ 111 0024 01A8     		add	r0, sp, #4
+ 112 0026 0193     		str	r3, [sp, #4]
+ 113 0028 FFF7FEFF 		bl	memcpy
+ 114 002c 019B     		ldr	r3, [sp, #4]
+ 115 002e 2360     		str	r3, [r4]
+ 116 0030 03B0     		add	sp, sp, #12
+ 117              		@ sp needed
+ 118 0032 30BD     		pop	{r4, r5, pc}
+ 119              	.L13:
+ 120 0034 0423     		movs	r3, #4
+ 121 0036 1846     		mov	r0, r3
+ARM GAS  /tmp/ccUpsPzb.s 			page 3
+
+
+ 122 0038 EEE7     		b	.L19
+ 124 003a 00BF     		.section	.text.tu_hwfifo_read,"ax",%progbits
+ 125              		.align	1
+ 126              		.p2align 2,,3
+ 127              		.global	tu_hwfifo_read
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	tu_hwfifo_read:
+ 133              		@ args = 0, pretend = 0, frame = 8
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135 0000 00B5     		push	{lr}
+ 136 0002 8446     		mov	ip, r0
+ 137 0004 83B0     		sub	sp, sp, #12
+ 138 0006 0846     		mov	r0, r1
+ 139 0008 C3B1     		cbz	r3, .L26
+ 140 000a 93F800E0 		ldrb	lr, [r3]	@ zero_extendqisi2
+ 141 000e 7346     		mov	r3, lr
+ 142 0010 05E0     		b	.L32
+ 143              	.L24:
+ 144 0012 DCF80010 		ldr	r1, [ip]
+ 145 0016 0160     		str	r1, [r0]
+ 146 0018 D21A     		subs	r2, r2, r3
+ 147 001a 92B2     		uxth	r2, r2
+ 148 001c 7044     		add	r0, r0, lr
+ 149              	.L32:
+ 150 001e 9342     		cmp	r3, r2
+ 151 0020 F7D9     		bls	.L24
+ 152 0022 12B9     		cbnz	r2, .L33
+ 153 0024 03B0     		add	sp, sp, #12
+ 154              		@ sp needed
+ 155 0026 5DF804FB 		ldr	pc, [sp], #4
+ 156              	.L33:
+ 157 002a DCF80030 		ldr	r3, [ip]
+ 158 002e 0193     		str	r3, [sp, #4]
+ 159 0030 01A9     		add	r1, sp, #4
+ 160 0032 FFF7FEFF 		bl	memcpy
+ 161 0036 03B0     		add	sp, sp, #12
+ 162              		@ sp needed
+ 163 0038 5DF804FB 		ldr	pc, [sp], #4
+ 164              	.L26:
+ 165 003c 0423     		movs	r3, #4
+ 166 003e 9E46     		mov	lr, r3
+ 167 0040 EDE7     		b	.L32
+ 169 0042 00BF     		.section	.text.tu_fifo_peek_n_access_mode,"ax",%progbits
+ 170              		.align	1
+ 171              		.p2align 2,,3
+ 172              		.global	tu_fifo_peek_n_access_mode
+ 173              		.syntax unified
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	tu_fifo_peek_n_access_mode:
+ 178              		@ args = 8, pretend = 0, frame = 8
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 181 0004 83B0     		sub	sp, sp, #12
+ 182 0006 B0F804E0 		ldrh	lr, [r0, #4]
+ARM GAS  /tmp/ccUpsPzb.s 			page 4
+
+
+ 183 000a BDF830C0 		ldrh	ip, [sp, #48]
+ 184 000e A3EB0C05 		sub	r5, r3, ip
+ 185 0012 ADB2     		uxth	r5, r5
+ 186 0014 6345     		cmp	r3, ip
+ 187 0016 BCBF     		itt	lt
+ 188 0018 05EB4E05 		addlt	r5, r5, lr, lsl #1
+ 189 001c ADB2     		uxthlt	r5, r5
+ 190 001e 0E46     		mov	r6, r1
+ 191 0020 0746     		mov	r7, r0
+ 192 0022 0D99     		ldr	r1, [sp, #52]
+ 193 0024 55B3     		cbz	r5, .L36
+ 194 0026 AE45     		cmp	lr, r5
+ 195 0028 2CD3     		bcc	.L88
+ 196              	.L37:
+ 197 002a 9542     		cmp	r5, r2
+ 198 002c 28BF     		it	cs
+ 199 002e 1546     		movcs	r5, r2
+ 200 0030 E645     		cmp	lr, ip
+ 201 0032 05D8     		bhi	.L40
+ 202              	.L41:
+ 203 0034 ACEB0E0C 		sub	ip, ip, lr
+ 204 0038 1FFA8CFC 		uxth	ip, ip
+ 205 003c E645     		cmp	lr, ip
+ 206 003e F9D9     		bls	.L41
+ 207              	.L40:
+ 208 0040 A5EB0E0A 		sub	r10, r5, lr
+ 209 0044 D7F80080 		ldr	r8, [r7]
+ 210 0048 AEEB0C0E 		sub	lr, lr, ip
+ 211 004c E244     		add	r10, r10, ip
+ 212 004e 1FFA8EF9 		uxth	r9, lr
+ 213 0052 1FFA8AFA 		uxth	r10, r10
+ 214 0056 08EB0C04 		add	r4, r8, ip
+ 215 005a 0029     		cmp	r1, #0
+ 216 005c 73D0     		beq	.L42
+ 217 005e 4D45     		cmp	r5, r9
+ 218 0060 0F78     		ldrb	r7, [r1]	@ zero_extendqisi2
+ 219 0062 1AD8     		bhi	.L43
+ 220 0064 BD42     		cmp	r5, r7
+ 221 0066 2A46     		mov	r2, r5
+ 222 0068 06D3     		bcc	.L44
+ 223              	.L45:
+ 224 006a D21B     		subs	r2, r2, r7
+ 225 006c 92B2     		uxth	r2, r2
+ 226 006e 2368     		ldr	r3, [r4]
+ 227 0070 3360     		str	r3, [r6]
+ 228 0072 BA42     		cmp	r2, r7
+ 229 0074 3C44     		add	r4, r4, r7
+ 230 0076 F8D2     		bcs	.L45
+ 231              	.L44:
+ 232 0078 002A     		cmp	r2, #0
+ 233 007a 6CD1     		bne	.L89
+ 234              	.L36:
+ 235 007c 2846     		mov	r0, r5
+ 236 007e 03B0     		add	sp, sp, #12
+ 237              		@ sp needed
+ 238 0080 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 239              	.L88:
+ARM GAS  /tmp/ccUpsPzb.s 			page 5
+
+
+ 240 0084 9E45     		cmp	lr, r3
+ 241 0086 94BF     		ite	ls
+ 242 0088 A3EB0E03 		subls	r3, r3, lr
+ 243 008c 7344     		addhi	r3, r3, lr
+ 244 008e 1FFA83FC 		uxth	ip, r3
+ 245 0092 A0F80AC0 		strh	ip, [r0, #10]	@ movhi
+ 246 0096 7546     		mov	r5, lr
+ 247 0098 C7E7     		b	.L37
+ 248              	.L43:
+ 249 009a C7F1000B 		rsb	fp, r7, #0
+ 250 009e 09EA0B0B 		and	fp, r9, fp
+ 251 00a2 BB45     		cmp	fp, r7
+ 252 00a4 5A46     		mov	r2, fp
+ 253 00a6 2146     		mov	r1, r4
+ 254 00a8 06D3     		bcc	.L47
+ 255              	.L48:
+ 256 00aa D21B     		subs	r2, r2, r7
+ 257 00ac 92B2     		uxth	r2, r2
+ 258 00ae 0B68     		ldr	r3, [r1]
+ 259 00b0 3360     		str	r3, [r6]
+ 260 00b2 BA42     		cmp	r2, r7
+ 261 00b4 3944     		add	r1, r1, r7
+ 262 00b6 F8D2     		bcs	.L48
+ 263              	.L47:
+ 264 00b8 002A     		cmp	r2, #0
+ 265 00ba 58D1     		bne	.L90
+ 266              	.L49:
+ 267 00bc 7A1E     		subs	r2, r7, #1
+ 268 00be 02EA0902 		and	r2, r2, r9
+ 269 00c2 12F0FF09 		ands	r9, r2, #255
+ 270 00c6 28D0     		beq	.L50
+ 271 00c8 04EB0B01 		add	r1, r4, fp
+ 272 00cc A7EB0904 		sub	r4, r7, r9
+ 273 00d0 A4B2     		uxth	r4, r4
+ 274 00d2 5445     		cmp	r4, r10
+ 275 00d4 28BF     		it	cs
+ 276 00d6 5446     		movcs	r4, r10
+ 277 00d8 E4B2     		uxtb	r4, r4
+ 278 00da 4A46     		mov	r2, r9
+ 279 00dc 6846     		mov	r0, sp
+ 280 00de FFF7FEFF 		bl	memcpy
+ 281 00e2 2CB1     		cbz	r4, .L54
+ 282 00e4 2246     		mov	r2, r4
+ 283 00e6 4146     		mov	r1, r8
+ 284 00e8 0DEB0900 		add	r0, sp, r9
+ 285 00ec FFF7FEFF 		bl	memcpy
+ 286              	.L54:
+ 287 00f0 04EB0902 		add	r2, r4, r9
+ 288 00f4 BA42     		cmp	r2, r7
+ 289 00f6 1FFA84F9 		uxth	r9, r4
+ 290 00fa 6946     		mov	r1, sp
+ 291 00fc 4BD3     		bcc	.L53
+ 292              	.L55:
+ 293 00fe D21B     		subs	r2, r2, r7
+ 294 0100 92B2     		uxth	r2, r2
+ 295 0102 0B68     		ldr	r3, [r1]
+ 296 0104 3360     		str	r3, [r6]
+ARM GAS  /tmp/ccUpsPzb.s 			page 6
+
+
+ 297 0106 BA42     		cmp	r2, r7
+ 298 0108 3944     		add	r1, r1, r7
+ 299 010a F8D2     		bcs	.L55
+ 300 010c 002A     		cmp	r2, #0
+ 301 010e 42D1     		bne	.L53
+ 302              	.L56:
+ 303 0110 AAEB0909 		sub	r9, r10, r9
+ 304 0114 A044     		add	r8, r8, r4
+ 305 0116 1FFA89FA 		uxth	r10, r9
+ 306              	.L50:
+ 307 011a BAF1000F 		cmp	r10, #0
+ 308 011e ADD0     		beq	.L36
+ 309 0120 BA45     		cmp	r10, r7
+ 310 0122 0CD3     		bcc	.L58
+ 311              	.L59:
+ 312 0124 AAEB070A 		sub	r10, r10, r7
+ 313 0128 1FFA8AFA 		uxth	r10, r10
+ 314 012c D8F80030 		ldr	r3, [r8]
+ 315 0130 3360     		str	r3, [r6]
+ 316 0132 BA45     		cmp	r10, r7
+ 317 0134 B844     		add	r8, r8, r7
+ 318 0136 F5D2     		bcs	.L59
+ 319 0138 BAF1000F 		cmp	r10, #0
+ 320 013c 9ED0     		beq	.L36
+ 321              	.L58:
+ 322 013e 0023     		movs	r3, #0
+ 323 0140 5246     		mov	r2, r10
+ 324 0142 4146     		mov	r1, r8
+ 325 0144 09E0     		b	.L87
+ 326              	.L42:
+ 327 0146 4D45     		cmp	r5, r9
+ 328 0148 19D8     		bhi	.L60
+ 329 014a 2A46     		mov	r2, r5
+ 330 014c 2146     		mov	r1, r4
+ 331 014e 3046     		mov	r0, r6
+ 332 0150 FFF7FEFF 		bl	memcpy
+ 333 0154 92E7     		b	.L36
+ 334              	.L89:
+ 335 0156 0023     		movs	r3, #0
+ 336 0158 2146     		mov	r1, r4
+ 337              	.L87:
+ 338 015a 01A8     		add	r0, sp, #4
+ 339 015c 0193     		str	r3, [sp, #4]
+ 340 015e FFF7FEFF 		bl	memcpy
+ 341 0162 019B     		ldr	r3, [sp, #4]
+ 342 0164 3360     		str	r3, [r6]
+ 343 0166 2846     		mov	r0, r5
+ 344 0168 03B0     		add	sp, sp, #12
+ 345              		@ sp needed
+ 346 016a BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 347              	.L90:
+ 348 016e 0023     		movs	r3, #0
+ 349 0170 01A8     		add	r0, sp, #4
+ 350 0172 0193     		str	r3, [sp, #4]
+ 351 0174 FFF7FEFF 		bl	memcpy
+ 352 0178 019B     		ldr	r3, [sp, #4]
+ 353 017a 3360     		str	r3, [r6]
+ARM GAS  /tmp/ccUpsPzb.s 			page 7
+
+
+ 354 017c 9EE7     		b	.L49
+ 355              	.L60:
+ 356 017e 2146     		mov	r1, r4
+ 357 0180 4A46     		mov	r2, r9
+ 358 0182 3046     		mov	r0, r6
+ 359 0184 FFF7FEFF 		bl	memcpy
+ 360 0188 3968     		ldr	r1, [r7]
+ 361 018a 5246     		mov	r2, r10
+ 362 018c 06EB0900 		add	r0, r6, r9
+ 363 0190 FFF7FEFF 		bl	memcpy
+ 364 0194 72E7     		b	.L36
+ 365              	.L53:
+ 366 0196 0023     		movs	r3, #0
+ 367 0198 01A8     		add	r0, sp, #4
+ 368 019a 0193     		str	r3, [sp, #4]
+ 369 019c FFF7FEFF 		bl	memcpy
+ 370 01a0 019B     		ldr	r3, [sp, #4]
+ 371 01a2 3360     		str	r3, [r6]
+ 372 01a4 B4E7     		b	.L56
+ 374 01a6 00BF     		.section	.text.tu_fifo_peek_n,"ax",%progbits
+ 375              		.align	1
+ 376              		.p2align 2,,3
+ 377              		.global	tu_fifo_peek_n
+ 378              		.syntax unified
+ 379              		.thumb
+ 380              		.thumb_func
+ 382              	tu_fifo_peek_n:
+ 383              		@ args = 0, pretend = 0, frame = 0
+ 384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 385 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
+ 386 0004 0389     		ldrh	r3, [r0, #8]
+ 387 0006 4489     		ldrh	r4, [r0, #10]
+ 388 0008 8588     		ldrh	r5, [r0, #4]
+ 389 000a 9BB2     		uxth	r3, r3
+ 390 000c A4B2     		uxth	r4, r4
+ 391 000e A342     		cmp	r3, r4
+ 392 0010 B6BF     		itet	lt
+ 393 0012 C4EB4506 		rsblt	r6, r4, r5, lsl #1
+ 394 0016 1E1B     		subge	r6, r3, r4
+ 395 0018 F618     		addlt	r6, r6, r3
+ 396 001a B6B2     		uxth	r6, r6
+ 397 001c 0746     		mov	r7, r0
+ 398 001e 8846     		mov	r8, r1
+ 399 0020 B6B1     		cbz	r6, .L94
+ 400 0022 B542     		cmp	r5, r6
+ 401 0024 26D3     		bcc	.L107
+ 402              	.L95:
+ 403 0026 9642     		cmp	r6, r2
+ 404 0028 28BF     		it	cs
+ 405 002a 1646     		movcs	r6, r2
+ 406 002c A542     		cmp	r5, r4
+ 407 002e 03D8     		bhi	.L98
+ 408              	.L99:
+ 409 0030 641B     		subs	r4, r4, r5
+ 410 0032 A4B2     		uxth	r4, r4
+ 411 0034 A542     		cmp	r5, r4
+ 412 0036 FBD9     		bls	.L99
+ARM GAS  /tmp/ccUpsPzb.s 			page 8
+
+
+ 413              	.L98:
+ 414 0038 A5EB0409 		sub	r9, r5, r4
+ 415 003c 3968     		ldr	r1, [r7]
+ 416 003e 1FFA89F9 		uxth	r9, r9
+ 417 0042 4E45     		cmp	r6, r9
+ 418 0044 2144     		add	r1, r1, r4
+ 419 0046 06D8     		bhi	.L100
+ 420 0048 3246     		mov	r2, r6
+ 421 004a 4046     		mov	r0, r8
+ 422 004c FFF7FEFF 		bl	memcpy
+ 423              	.L94:
+ 424 0050 3046     		mov	r0, r6
+ 425 0052 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 426              	.L100:
+ 427 0056 4A46     		mov	r2, r9
+ 428 0058 4046     		mov	r0, r8
+ 429 005a FFF7FEFF 		bl	memcpy
+ 430 005e 731B     		subs	r3, r6, r5
+ 431 0060 E218     		adds	r2, r4, r3
+ 432 0062 3968     		ldr	r1, [r7]
+ 433 0064 08EB0900 		add	r0, r8, r9
+ 434 0068 92B2     		uxth	r2, r2
+ 435 006a FFF7FEFF 		bl	memcpy
+ 436 006e 3046     		mov	r0, r6
+ 437 0070 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 438              	.L107:
+ 439 0074 AB42     		cmp	r3, r5
+ 440 0076 2CBF     		ite	cs
+ 441 0078 5B1B     		subcs	r3, r3, r5
+ 442 007a 5B19     		addcc	r3, r3, r5
+ 443 007c 9CB2     		uxth	r4, r3
+ 444 007e 4481     		strh	r4, [r0, #10]	@ movhi
+ 445 0080 2E46     		mov	r6, r5
+ 446 0082 D0E7     		b	.L95
+ 448              		.section	.text.tu_fifo_read_n_access_mode,"ax",%progbits
+ 449              		.align	1
+ 450              		.p2align 2,,3
+ 451              		.global	tu_fifo_read_n_access_mode
+ 452              		.syntax unified
+ 453              		.thumb
+ 454              		.thumb_func
+ 456              	tu_fifo_read_n_access_mode:
+ 457              		@ args = 0, pretend = 0, frame = 16
+ 458              		@ frame_needed = 0, uses_anonymous_args = 0
+ 459 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 460 0004 8046     		mov	r8, r0
+ 461 0006 0089     		ldrh	r0, [r0, #8]
+ 462 0008 B8F80A40 		ldrh	r4, [r8, #10]
+ 463 000c B8F80460 		ldrh	r6, [r8, #4]
+ 464 0010 80B2     		uxth	r0, r0
+ 465 0012 A4B2     		uxth	r4, r4
+ 466 0014 A042     		cmp	r0, r4
+ 467 0016 B6BF     		itet	lt
+ 468 0018 C4EB4607 		rsblt	r7, r4, r6, lsl #1
+ 469 001c 071B     		subge	r7, r0, r4
+ 470 001e 3F18     		addlt	r7, r7, r0
+ 471 0020 BFB2     		uxth	r7, r7
+ARM GAS  /tmp/ccUpsPzb.s 			page 9
+
+
+ 472 0022 8946     		mov	r9, r1
+ 473 0024 85B0     		sub	sp, sp, #20
+ 474 0026 1946     		mov	r1, r3
+ 475 0028 002F     		cmp	r7, #0
+ 476 002a 44D0     		beq	.L166
+ 477 002c BE42     		cmp	r6, r7
+ 478 002e 39D3     		bcc	.L167
+ 479              	.L113:
+ 480 0030 BA42     		cmp	r2, r7
+ 481 0032 28BF     		it	cs
+ 482 0034 3A46     		movcs	r2, r7
+ 483 0036 A642     		cmp	r6, r4
+ 484 0038 97B2     		uxth	r7, r2
+ 485 003a 03D8     		bhi	.L116
+ 486              	.L117:
+ 487 003c A41B     		subs	r4, r4, r6
+ 488 003e A4B2     		uxth	r4, r4
+ 489 0040 A642     		cmp	r6, r4
+ 490 0042 FBD9     		bls	.L117
+ 491              	.L116:
+ 492 0044 D8F80030 		ldr	r3, [r8]
+ 493 0048 A7EB060A 		sub	r10, r7, r6
+ 494 004c A244     		add	r10, r10, r4
+ 495 004e A6EB040B 		sub	fp, r6, r4
+ 496 0052 1FFA8AFA 		uxth	r10, r10
+ 497 0056 1FFA8BFB 		uxth	fp, fp
+ 498 005a 1C44     		add	r4, r4, r3
+ 499 005c 0029     		cmp	r1, #0
+ 500 005e 00F09580 		beq	.L118
+ 501 0062 5F45     		cmp	r7, fp
+ 502 0064 0D78     		ldrb	r5, [r1]	@ zero_extendqisi2
+ 503 0066 34D8     		bhi	.L119
+ 504 0068 AF42     		cmp	r7, r5
+ 505 006a 3A46     		mov	r2, r7
+ 506 006c 07D3     		bcc	.L120
+ 507              	.L121:
+ 508 006e 521B     		subs	r2, r2, r5
+ 509 0070 92B2     		uxth	r2, r2
+ 510 0072 2368     		ldr	r3, [r4]
+ 511 0074 C9F80030 		str	r3, [r9]
+ 512 0078 AA42     		cmp	r2, r5
+ 513 007a 2C44     		add	r4, r4, r5
+ 514 007c F7D2     		bcs	.L121
+ 515              	.L120:
+ 516 007e 002A     		cmp	r2, #0
+ 517 0080 40F08E80 		bne	.L168
+ 518              	.L123:
+ 519 0084 B8F80A20 		ldrh	r2, [r8, #10]
+ 520 0088 92B2     		uxth	r2, r2
+ 521 008a D319     		adds	r3, r2, r7
+ 522 008c 9BB2     		uxth	r3, r3
+ 523 008e 9A42     		cmp	r2, r3
+ 524 0090 14D9     		bls	.L112
+ 525 0092 7200     		lsls	r2, r6, #1
+ 526              	.L138:
+ 527 0094 9B1A     		subs	r3, r3, r2
+ 528 0096 9BB2     		uxth	r3, r3
+ARM GAS  /tmp/ccUpsPzb.s 			page 10
+
+
+ 529 0098 3846     		mov	r0, r7
+ 530 009a A8F80A30 		strh	r3, [r8, #10]	@ movhi
+ 531 009e 05B0     		add	sp, sp, #20
+ 532              		@ sp needed
+ 533 00a0 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 534              	.L167:
+ 535 00a4 B042     		cmp	r0, r6
+ 536 00a6 2CBF     		ite	cs
+ 537 00a8 801B     		subcs	r0, r0, r6
+ 538 00aa 8019     		addcc	r0, r0, r6
+ 539 00ac 84B2     		uxth	r4, r0
+ 540 00ae A8F80A40 		strh	r4, [r8, #10]	@ movhi
+ 541 00b2 3746     		mov	r7, r6
+ 542 00b4 BCE7     		b	.L113
+ 543              	.L166:
+ 544 00b6 B8F80A30 		ldrh	r3, [r8, #10]
+ 545 00ba 9BB2     		uxth	r3, r3
+ 546              	.L112:
+ 547 00bc B3EB460F 		cmp	r3, r6, lsl #1
+ 548 00c0 4FEA4602 		lsl	r2, r6, #1
+ 549 00c4 E6DA     		bge	.L138
+ 550 00c6 3846     		mov	r0, r7
+ 551 00c8 A8F80A30 		strh	r3, [r8, #10]	@ movhi
+ 552 00cc 05B0     		add	sp, sp, #20
+ 553              		@ sp needed
+ 554 00ce BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 555              	.L119:
+ 556 00d2 6A42     		rsbs	r2, r5, #0
+ 557 00d4 0BEA0202 		and	r2, fp, r2
+ 558 00d8 AA42     		cmp	r2, r5
+ 559 00da 0092     		str	r2, [sp]
+ 560 00dc 2146     		mov	r1, r4
+ 561 00de 07D3     		bcc	.L125
+ 562              	.L126:
+ 563 00e0 521B     		subs	r2, r2, r5
+ 564 00e2 92B2     		uxth	r2, r2
+ 565 00e4 0868     		ldr	r0, [r1]
+ 566 00e6 C9F80000 		str	r0, [r9]
+ 567 00ea AA42     		cmp	r2, r5
+ 568 00ec 2944     		add	r1, r1, r5
+ 569 00ee F7D2     		bcs	.L126
+ 570              	.L125:
+ 571 00f0 002A     		cmp	r2, #0
+ 572 00f2 5FD1     		bne	.L169
+ 573              	.L127:
+ 574 00f4 6A1E     		subs	r2, r5, #1
+ 575 00f6 02EA0B0B 		and	fp, r2, fp
+ 576 00fa 1BF0FF0B 		ands	fp, fp, #255
+ 577 00fe 2FD0     		beq	.L128
+ 578 0100 0099     		ldr	r1, [sp]
+ 579 0102 0193     		str	r3, [sp, #4]
+ 580 0104 2144     		add	r1, r1, r4
+ 581 0106 A5EB0B04 		sub	r4, r5, fp
+ 582 010a A4B2     		uxth	r4, r4
+ 583 010c 5445     		cmp	r4, r10
+ 584 010e 28BF     		it	cs
+ 585 0110 5446     		movcs	r4, r10
+ARM GAS  /tmp/ccUpsPzb.s 			page 11
+
+
+ 586 0112 5A46     		mov	r2, fp
+ 587 0114 02A8     		add	r0, sp, #8
+ 588 0116 E4B2     		uxtb	r4, r4
+ 589 0118 FFF7FEFF 		bl	memcpy
+ 590 011c 019B     		ldr	r3, [sp, #4]
+ 591 011e 4CB1     		cbz	r4, .L132
+ 592 0120 1946     		mov	r1, r3
+ 593 0122 0093     		str	r3, [sp]
+ 594 0124 0BF10803 		add	r3, fp, #8
+ 595 0128 0DEB0300 		add	r0, sp, r3
+ 596 012c 2246     		mov	r2, r4
+ 597 012e FFF7FEFF 		bl	memcpy
+ 598 0132 009B     		ldr	r3, [sp]
+ 599              	.L132:
+ 600 0134 04EB0B02 		add	r2, r4, fp
+ 601 0138 AA42     		cmp	r2, r5
+ 602 013a 1FFA84FB 		uxth	fp, r4
+ 603 013e 02A9     		add	r1, sp, #8
+ 604 0140 52D3     		bcc	.L131
+ 605              	.L133:
+ 606 0142 521B     		subs	r2, r2, r5
+ 607 0144 92B2     		uxth	r2, r2
+ 608 0146 0868     		ldr	r0, [r1]
+ 609 0148 C9F80000 		str	r0, [r9]
+ 610 014c AA42     		cmp	r2, r5
+ 611 014e 2944     		add	r1, r1, r5
+ 612 0150 F7D2     		bcs	.L133
+ 613 0152 002A     		cmp	r2, #0
+ 614 0154 48D1     		bne	.L131
+ 615              	.L134:
+ 616 0156 AAEB0B0B 		sub	fp, r10, fp
+ 617 015a 2344     		add	r3, r3, r4
+ 618 015c 1FFA8BFA 		uxth	r10, fp
+ 619              	.L128:
+ 620 0160 BAF1000F 		cmp	r10, #0
+ 621 0164 8ED0     		beq	.L123
+ 622 0166 AA45     		cmp	r10, r5
+ 623 0168 0DD3     		bcc	.L135
+ 624              	.L136:
+ 625 016a AAEB050A 		sub	r10, r10, r5
+ 626 016e 1FFA8AFA 		uxth	r10, r10
+ 627 0172 1A68     		ldr	r2, [r3]
+ 628 0174 C9F80020 		str	r2, [r9]
+ 629 0178 AA45     		cmp	r10, r5
+ 630 017a 2B44     		add	r3, r3, r5
+ 631 017c F5D2     		bcs	.L136
+ 632 017e BAF1000F 		cmp	r10, #0
+ 633 0182 3FF47FAF 		beq	.L123
+ 634              	.L135:
+ 635 0186 5246     		mov	r2, r10
+ 636 0188 1946     		mov	r1, r3
+ 637 018a 0AE0     		b	.L164
+ 638              	.L118:
+ 639 018c 5F45     		cmp	r7, fp
+ 640 018e 1CD8     		bhi	.L137
+ 641 0190 3A46     		mov	r2, r7
+ 642 0192 2146     		mov	r1, r4
+ARM GAS  /tmp/ccUpsPzb.s 			page 12
+
+
+ 643 0194 4846     		mov	r0, r9
+ 644 0196 FFF7FEFF 		bl	memcpy
+ 645 019a B8F80460 		ldrh	r6, [r8, #4]
+ 646 019e 71E7     		b	.L123
+ 647              	.L168:
+ 648 01a0 2146     		mov	r1, r4
+ 649              	.L164:
+ 650 01a2 0023     		movs	r3, #0
+ 651 01a4 03A8     		add	r0, sp, #12
+ 652 01a6 0393     		str	r3, [sp, #12]
+ 653 01a8 FFF7FEFF 		bl	memcpy
+ 654 01ac 039B     		ldr	r3, [sp, #12]
+ 655 01ae C9F80030 		str	r3, [r9]
+ 656 01b2 67E7     		b	.L123
+ 657              	.L169:
+ 658 01b4 0020     		movs	r0, #0
+ 659 01b6 0390     		str	r0, [sp, #12]
+ 660 01b8 03A8     		add	r0, sp, #12
+ 661 01ba 0193     		str	r3, [sp, #4]
+ 662 01bc FFF7FEFF 		bl	memcpy
+ 663 01c0 039A     		ldr	r2, [sp, #12]
+ 664 01c2 019B     		ldr	r3, [sp, #4]
+ 665 01c4 C9F80020 		str	r2, [r9]
+ 666 01c8 94E7     		b	.L127
+ 667              	.L137:
+ 668 01ca 2146     		mov	r1, r4
+ 669 01cc 5A46     		mov	r2, fp
+ 670 01ce 4846     		mov	r0, r9
+ 671 01d0 FFF7FEFF 		bl	memcpy
+ 672 01d4 D8F80010 		ldr	r1, [r8]
+ 673 01d8 5246     		mov	r2, r10
+ 674 01da 09EB0B00 		add	r0, r9, fp
+ 675 01de FFF7FEFF 		bl	memcpy
+ 676 01e2 B8F80460 		ldrh	r6, [r8, #4]
+ 677 01e6 4DE7     		b	.L123
+ 678              	.L131:
+ 679 01e8 0020     		movs	r0, #0
+ 680 01ea 0390     		str	r0, [sp, #12]
+ 681 01ec 03A8     		add	r0, sp, #12
+ 682 01ee 0093     		str	r3, [sp]
+ 683 01f0 FFF7FEFF 		bl	memcpy
+ 684 01f4 039A     		ldr	r2, [sp, #12]
+ 685 01f6 009B     		ldr	r3, [sp]
+ 686 01f8 C9F80020 		str	r2, [r9]
+ 687 01fc ABE7     		b	.L134
+ 689 01fe 00BF     		.section	.text.tu_fifo_write_n_access_mode,"ax",%progbits
+ 690              		.align	1
+ 691              		.p2align 2,,3
+ 692              		.global	tu_fifo_write_n_access_mode
+ 693              		.syntax unified
+ 694              		.thumb
+ 695              		.thumb_func
+ 697              	tu_fifo_write_n_access_mode:
+ 698              		@ args = 0, pretend = 0, frame = 32
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 701 0004 1546     		mov	r5, r2
+ARM GAS  /tmp/ccUpsPzb.s 			page 13
+
+
+ 702 0006 89B0     		sub	sp, sp, #36
+ 703 0008 002A     		cmp	r2, #0
+ 704 000a 4FD0     		beq	.L171
+ 705 000c B0F80890 		ldrh	r9, [r0, #8]
+ 706 0010 4289     		ldrh	r2, [r0, #10]
+ 707 0012 9B46     		mov	fp, r3
+ 708 0014 8379     		ldrb	r3, [r0, #6]	@ zero_extendqisi2
+ 709 0016 8846     		mov	r8, r1
+ 710 0018 0646     		mov	r6, r0
+ 711 001a 8188     		ldrh	r1, [r0, #4]
+ 712 001c 1FFA89F9 		uxth	r9, r9
+ 713 0020 92B2     		uxth	r2, r2
+ 714 0022 002B     		cmp	r3, #0
+ 715 0024 46D1     		bne	.L172
+ 716 0026 9145     		cmp	r9, r2
+ 717 0028 B6BF     		itet	lt
+ 718 002a C2EB4102 		rsblt	r2, r2, r1, lsl #1
+ 719 002e A9EB0202 		subge	r2, r9, r2
+ 720 0032 4A44     		addlt	r2, r2, r9
+ 721 0034 92B2     		uxth	r2, r2
+ 722 0036 8A42     		cmp	r2, r1
+ 723 0038 5CD2     		bcs	.L207
+ 724 003a 8A1A     		subs	r2, r1, r2
+ 725 003c 92B2     		uxth	r2, r2
+ 726 003e 9542     		cmp	r5, r2
+ 727 0040 28BF     		it	cs
+ 728 0042 1546     		movcs	r5, r2
+ 729 0044 09EB0503 		add	r3, r9, r5
+ 730 0048 681A     		subs	r0, r5, r1
+ 731 004a 9BB2     		uxth	r3, r3
+ 732 004c 80B2     		uxth	r0, r0
+ 733              	.L175:
+ 734 004e 8945     		cmp	r9, r1
+ 735 0050 4C46     		mov	r4, r9
+ 736 0052 03D3     		bcc	.L182
+ 737              	.L183:
+ 738 0054 641A     		subs	r4, r4, r1
+ 739 0056 A4B2     		uxth	r4, r4
+ 740 0058 8C42     		cmp	r4, r1
+ 741 005a FBD2     		bcs	.L183
+ 742              	.L182:
+ 743 005c 2044     		add	r0, r0, r4
+ 744 005e 82B2     		uxth	r2, r0
+ 745 0060 0192     		str	r2, [sp, #4]
+ 746 0062 3268     		ldr	r2, [r6]
+ 747 0064 02EB040A 		add	r10, r2, r4
+ 748 0068 0C1B     		subs	r4, r1, r4
+ 749 006a A4B2     		uxth	r4, r4
+ 750 006c BBF1000F 		cmp	fp, #0
+ 751 0070 6BD0     		beq	.L184
+ 752 0072 A542     		cmp	r5, r4
+ 753 0074 9BF80070 		ldrb	r7, [fp]	@ zero_extendqisi2
+ 754 0078 4BD8     		bhi	.L185
+ 755 007a BD42     		cmp	r5, r7
+ 756 007c 2A46     		mov	r2, r5
+ 757 007e C0F08B80 		bcc	.L186
+ 758              	.L187:
+ARM GAS  /tmp/ccUpsPzb.s 			page 14
+
+
+ 759 0082 D21B     		subs	r2, r2, r7
+ 760 0084 92B2     		uxth	r2, r2
+ 761 0086 D8F80000 		ldr	r0, [r8]
+ 762 008a CAF80000 		str	r0, [r10]
+ 763 008e BA42     		cmp	r2, r7
+ 764 0090 BA44     		add	r10, r10, r7
+ 765 0092 F6D2     		bcs	.L187
+ 766 0094 002A     		cmp	r2, #0
+ 767 0096 7FD1     		bne	.L186
+ 768              	.L188:
+ 769 0098 4B45     		cmp	r3, r9
+ 770 009a 4FEA4104 		lsl	r4, r1, #1
+ 771 009e 02D3     		bcc	.L204
+ 772 00a0 B3EB410F 		cmp	r3, r1, lsl #1
+ 773 00a4 01DB     		blt	.L205
+ 774              	.L204:
+ 775 00a6 1C1B     		subs	r4, r3, r4
+ 776 00a8 A3B2     		uxth	r3, r4
+ 777              	.L205:
+ 778 00aa 3381     		strh	r3, [r6, #8]	@ movhi
+ 779              	.L171:
+ 780 00ac 2846     		mov	r0, r5
+ 781 00ae 09B0     		add	sp, sp, #36
+ 782              		@ sp needed
+ 783 00b0 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 784              	.L172:
+ 785 00b4 8D42     		cmp	r5, r1
+ 786 00b6 22D2     		bcs	.L242
+ 787 00b8 9145     		cmp	r9, r2
+ 788 00ba B6BF     		itet	lt
+ 789 00bc C2EB4103 		rsblt	r3, r2, r1, lsl #1
+ 790 00c0 A9EB0203 		subge	r3, r9, r2
+ 791 00c4 4B44     		addlt	r3, r3, r9
+ 792 00c6 9BB2     		uxth	r3, r3
+ 793 00c8 4C00     		lsls	r4, r1, #1
+ 794 00ca 2B44     		add	r3, r3, r5
+ 795 00cc 681A     		subs	r0, r5, r1
+ 796 00ce A342     		cmp	r3, r4
+ 797 00d0 80B2     		uxth	r0, r0
+ 798 00d2 0BDB     		blt	.L240
+ 799 00d4 5318     		adds	r3, r2, r1
+ 800 00d6 9BB2     		uxth	r3, r3
+ 801 00d8 A3EB0509 		sub	r9, r3, r5
+ 802 00dc 1FFA89F9 		uxth	r9, r9
+ 803 00e0 4A45     		cmp	r2, r9
+ 804 00e2 4FD9     		bls	.L243
+ 805              	.L181:
+ 806 00e4 A9EB0404 		sub	r4, r9, r4
+ 807 00e8 1FFA84F9 		uxth	r9, r4
+ 808              	.L240:
+ 809 00ec 05EB0903 		add	r3, r5, r9
+ 810 00f0 9BB2     		uxth	r3, r3
+ 811 00f2 ACE7     		b	.L175
+ 812              	.L207:
+ 813 00f4 0025     		movs	r5, #0
+ 814 00f6 2846     		mov	r0, r5
+ 815 00f8 09B0     		add	sp, sp, #36
+ARM GAS  /tmp/ccUpsPzb.s 			page 15
+
+
+ 816              		@ sp needed
+ 817 00fa BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 818              	.L242:
+ 819 00fe BBF1000F 		cmp	fp, #0
+ 820 0102 3CD0     		beq	.L244
+ 821              	.L177:
+ 822 0104 0029     		cmp	r1, #0
+ 823 0106 41D1     		bne	.L245
+ 824 0108 0D46     		mov	r5, r1
+ 825 010a 2846     		mov	r0, r5
+ 826 010c 09B0     		add	sp, sp, #36
+ 827              		@ sp needed
+ 828 010e BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 829              	.L185:
+ 830 0112 7A42     		rsbs	r2, r7, #0
+ 831 0114 2240     		ands	r2, r2, r4
+ 832 0116 BA42     		cmp	r2, r7
+ 833 0118 0292     		str	r2, [sp, #8]
+ 834 011a 5046     		mov	r0, r10
+ 835 011c 07D3     		bcc	.L189
+ 836              	.L190:
+ 837 011e D21B     		subs	r2, r2, r7
+ 838 0120 92B2     		uxth	r2, r2
+ 839 0122 D8F80010 		ldr	r1, [r8]
+ 840 0126 0160     		str	r1, [r0]
+ 841 0128 BA42     		cmp	r2, r7
+ 842 012a 3844     		add	r0, r0, r7
+ 843 012c F7D2     		bcs	.L190
+ 844              	.L189:
+ 845 012e 002A     		cmp	r2, #0
+ 846 0130 40F09E80 		bne	.L246
+ 847              	.L191:
+ 848 0134 7A1E     		subs	r2, r7, #1
+ 849 0136 2240     		ands	r2, r2, r4
+ 850 0138 12F0FF04 		ands	r4, r2, #255
+ 851 013c 52D1     		bne	.L247
+ 852 013e 3068     		ldr	r0, [r6]
+ 853              	.L197:
+ 854 0140 019A     		ldr	r2, [sp, #4]
+ 855 0142 002A     		cmp	r2, #0
+ 856 0144 33D1     		bne	.L200
+ 857              	.L241:
+ 858 0146 B188     		ldrh	r1, [r6, #4]
+ 859 0148 A6E7     		b	.L188
+ 860              	.L184:
+ 861 014a A542     		cmp	r5, r4
+ 862 014c 08D8     		bhi	.L203
+ 863 014e 4146     		mov	r1, r8
+ 864 0150 5046     		mov	r0, r10
+ 865 0152 2A46     		mov	r2, r5
+ 866 0154 0193     		str	r3, [sp, #4]
+ 867 0156 FFF7FEFF 		bl	memcpy
+ 868 015a B188     		ldrh	r1, [r6, #4]
+ 869 015c 019B     		ldr	r3, [sp, #4]
+ 870 015e 9BE7     		b	.L188
+ 871              	.L203:
+ 872 0160 2246     		mov	r2, r4
+ARM GAS  /tmp/ccUpsPzb.s 			page 16
+
+
+ 873 0162 4146     		mov	r1, r8
+ 874 0164 5046     		mov	r0, r10
+ 875 0166 0293     		str	r3, [sp, #8]
+ 876 0168 FFF7FEFF 		bl	memcpy
+ 877 016c 08EB0401 		add	r1, r8, r4
+ 878 0170 019A     		ldr	r2, [sp, #4]
+ 879 0172 3068     		ldr	r0, [r6]
+ 880 0174 FFF7FEFF 		bl	memcpy
+ 881 0178 B188     		ldrh	r1, [r6, #4]
+ 882 017a 029B     		ldr	r3, [sp, #8]
+ 883 017c 8CE7     		b	.L188
+ 884              	.L244:
+ 885 017e 6D1A     		subs	r5, r5, r1
+ 886 0180 A844     		add	r8, r8, r5
+ 887 0182 BFE7     		b	.L177
+ 888              	.L243:
+ 889 0184 4C45     		cmp	r4, r9
+ 890 0186 3FF762AF 		bgt	.L175
+ 891 018a ABE7     		b	.L181
+ 892              	.L245:
+ 893 018c 5318     		adds	r3, r2, r1
+ 894 018e 9BB2     		uxth	r3, r3
+ 895 0190 9146     		mov	r9, r2
+ 896 0192 0D46     		mov	r5, r1
+ 897 0194 0020     		movs	r0, #0
+ 898 0196 5AE7     		b	.L175
+ 899              	.L186:
+ 900 0198 D8F80010 		ldr	r1, [r8]
+ 901 019c 0791     		str	r1, [sp, #28]
+ 902 019e 5046     		mov	r0, r10
+ 903 01a0 07A9     		add	r1, sp, #28
+ 904 01a2 0193     		str	r3, [sp, #4]
+ 905 01a4 FFF7FEFF 		bl	memcpy
+ 906 01a8 B188     		ldrh	r1, [r6, #4]
+ 907 01aa 019B     		ldr	r3, [sp, #4]
+ 908 01ac 74E7     		b	.L188
+ 909              	.L200:
+ 910 01ae 1146     		mov	r1, r2
+ 911 01b0 9BF80020 		ldrb	r2, [fp]	@ zero_extendqisi2
+ 912 01b4 8A42     		cmp	r2, r1
+ 913 01b6 0AD8     		bhi	.L201
+ 914              	.L202:
+ 915 01b8 891A     		subs	r1, r1, r2
+ 916 01ba 89B2     		uxth	r1, r1
+ 917 01bc D8F80040 		ldr	r4, [r8]
+ 918 01c0 0460     		str	r4, [r0]
+ 919 01c2 8A42     		cmp	r2, r1
+ 920 01c4 1044     		add	r0, r0, r2
+ 921 01c6 F7D9     		bls	.L202
+ 922 01c8 0191     		str	r1, [sp, #4]
+ 923 01ca 0029     		cmp	r1, #0
+ 924 01cc BBD0     		beq	.L241
+ 925              	.L201:
+ 926 01ce D8F80020 		ldr	r2, [r8]
+ 927 01d2 0792     		str	r2, [sp, #28]
+ 928 01d4 07A9     		add	r1, sp, #28
+ 929 01d6 019A     		ldr	r2, [sp, #4]
+ARM GAS  /tmp/ccUpsPzb.s 			page 17
+
+
+ 930 01d8 0293     		str	r3, [sp, #8]
+ 931 01da FFF7FEFF 		bl	memcpy
+ 932 01de B188     		ldrh	r1, [r6, #4]
+ 933 01e0 029B     		ldr	r3, [sp, #8]
+ 934 01e2 59E7     		b	.L188
+ 935              	.L247:
+ 936 01e4 0199     		ldr	r1, [sp, #4]
+ 937 01e6 3A1B     		subs	r2, r7, r4
+ 938 01e8 92B2     		uxth	r2, r2
+ 939 01ea 8A42     		cmp	r2, r1
+ 940 01ec 28BF     		it	cs
+ 941 01ee 0A46     		movcs	r2, r1
+ 942 01f0 D0B2     		uxtb	r0, r2
+ 943 01f2 9BF80010 		ldrb	r1, [fp]	@ zero_extendqisi2
+ 944 01f6 0390     		str	r0, [sp, #12]
+ 945 01f8 2218     		adds	r2, r4, r0
+ 946 01fa 0746     		mov	r7, r0
+ 947 01fc 8A42     		cmp	r2, r1
+ 948 01fe 06A8     		add	r0, sp, #24
+ 949 0200 0490     		str	r0, [sp, #16]
+ 950 0202 3ED3     		bcc	.L193
+ 951 0204 9C46     		mov	ip, r3
+ 952              	.L194:
+ 953 0206 521A     		subs	r2, r2, r1
+ 954 0208 92B2     		uxth	r2, r2
+ 955 020a D8F80030 		ldr	r3, [r8]
+ 956 020e 0360     		str	r3, [r0]
+ 957 0210 8A42     		cmp	r2, r1
+ 958 0212 0844     		add	r0, r0, r1
+ 959 0214 F7D2     		bcs	.L194
+ 960 0216 6346     		mov	r3, ip
+ 961 0218 002A     		cmp	r2, #0
+ 962 021a 32D1     		bne	.L193
+ 963              	.L195:
+ 964 021c 0298     		ldr	r0, [sp, #8]
+ 965 021e 0499     		ldr	r1, [sp, #16]
+ 966 0220 0593     		str	r3, [sp, #20]
+ 967 0222 5044     		add	r0, r0, r10
+ 968 0224 2246     		mov	r2, r4
+ 969 0226 FFF7FEFF 		bl	memcpy
+ 970 022a 059B     		ldr	r3, [sp, #20]
+ 971 022c C7B1     		cbz	r7, .L199
+ 972 022e 04F12002 		add	r2, r4, #32
+ 973 0232 6A44     		add	r2, sp, r2
+ 974 0234 3168     		ldr	r1, [r6]
+ 975 0236 12F8080C 		ldrb	r0, [r2, #-8]	@ zero_extendqisi2
+ 976 023a 0870     		strb	r0, [r1]
+ 977 023c 012F     		cmp	r7, #1
+ 978 023e 0FD0     		beq	.L199
+ 979 0240 3168     		ldr	r1, [r6]
+ 980 0242 12F8070C 		ldrb	r0, [r2, #-7]	@ zero_extendqisi2
+ 981 0246 4870     		strb	r0, [r1, #1]
+ 982 0248 022F     		cmp	r7, #2
+ 983 024a 09D0     		beq	.L199
+ 984 024c 3168     		ldr	r1, [r6]
+ 985 024e 12F8060C 		ldrb	r0, [r2, #-6]	@ zero_extendqisi2
+ 986 0252 8870     		strb	r0, [r1, #2]
+ARM GAS  /tmp/ccUpsPzb.s 			page 18
+
+
+ 987 0254 032F     		cmp	r7, #3
+ 988 0256 03D0     		beq	.L199
+ 989 0258 12F8051C 		ldrb	r1, [r2, #-5]	@ zero_extendqisi2
+ 990 025c 3268     		ldr	r2, [r6]
+ 991 025e D170     		strb	r1, [r2, #3]
+ 992              	.L199:
+ 993 0260 019A     		ldr	r2, [sp, #4]
+ 994 0262 0399     		ldr	r1, [sp, #12]
+ 995 0264 3068     		ldr	r0, [r6]
+ 996 0266 521A     		subs	r2, r2, r1
+ 997 0268 92B2     		uxth	r2, r2
+ 998 026a 0192     		str	r2, [sp, #4]
+ 999 026c 3844     		add	r0, r0, r7
+ 1000 026e 67E7     		b	.L197
+ 1001              	.L246:
+ 1002 0270 D8F80010 		ldr	r1, [r8]
+ 1003 0274 0791     		str	r1, [sp, #28]
+ 1004 0276 07A9     		add	r1, sp, #28
+ 1005 0278 0393     		str	r3, [sp, #12]
+ 1006 027a FFF7FEFF 		bl	memcpy
+ 1007 027e 039B     		ldr	r3, [sp, #12]
+ 1008 0280 58E7     		b	.L191
+ 1009              	.L193:
+ 1010 0282 D8F80010 		ldr	r1, [r8]
+ 1011 0286 0791     		str	r1, [sp, #28]
+ 1012 0288 07A9     		add	r1, sp, #28
+ 1013 028a 0593     		str	r3, [sp, #20]
+ 1014 028c FFF7FEFF 		bl	memcpy
+ 1015 0290 059B     		ldr	r3, [sp, #20]
+ 1016 0292 C3E7     		b	.L195
+ 1018              		.section	.text.tu_fifo_discard_n,"ax",%progbits
+ 1019              		.align	1
+ 1020              		.p2align 2,,3
+ 1021              		.global	tu_fifo_discard_n
+ 1022              		.syntax unified
+ 1023              		.thumb
+ 1024              		.thumb_func
+ 1026              	tu_fifo_discard_n:
+ 1027              		@ args = 0, pretend = 0, frame = 0
+ 1028              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1029 0000 0246     		mov	r2, r0
+ 1030 0002 0846     		mov	r0, r1
+ 1031 0004 1389     		ldrh	r3, [r2, #8]
+ 1032 0006 5189     		ldrh	r1, [r2, #10]
+ 1033 0008 B2F804C0 		ldrh	ip, [r2, #4]
+ 1034 000c 89B2     		uxth	r1, r1
+ 1035 000e 9BB2     		uxth	r3, r3
+ 1036 0010 8B42     		cmp	r3, r1
+ 1037 0012 B6BF     		itet	lt
+ 1038 0014 C1EB4C01 		rsblt	r1, r1, ip, lsl #1
+ 1039 0018 5B1A     		subge	r3, r3, r1
+ 1040 001a 5B18     		addlt	r3, r3, r1
+ 1041 001c 6045     		cmp	r0, ip
+ 1042 001e 9BB2     		uxth	r3, r3
+ 1043 0020 28BF     		it	cs
+ 1044 0022 6046     		movcs	r0, ip
+ 1045 0024 5189     		ldrh	r1, [r2, #10]
+ARM GAS  /tmp/ccUpsPzb.s 			page 19
+
+
+ 1046 0026 9842     		cmp	r0, r3
+ 1047 0028 28BF     		it	cs
+ 1048 002a 1846     		movcs	r0, r3
+ 1049 002c 89B2     		uxth	r1, r1
+ 1050 002e 0B18     		adds	r3, r1, r0
+ 1051 0030 9BB2     		uxth	r3, r3
+ 1052 0032 9942     		cmp	r1, r3
+ 1053 0034 00B5     		push	{lr}
+ 1054 0036 4FEA4C0E 		lsl	lr, ip, #1
+ 1055 003a 01D8     		bhi	.L251
+ 1056 003c 7345     		cmp	r3, lr
+ 1057 003e 02DB     		blt	.L252
+ 1058              	.L251:
+ 1059 0040 A3EB0E03 		sub	r3, r3, lr
+ 1060 0044 9BB2     		uxth	r3, r3
+ 1061              	.L252:
+ 1062 0046 5381     		strh	r3, [r2, #10]	@ movhi
+ 1063 0048 5DF804FB 		ldr	pc, [sp], #4
+ 1065              		.section	.text.tu_fifo_read,"ax",%progbits
+ 1066              		.align	1
+ 1067              		.p2align 2,,3
+ 1068              		.global	tu_fifo_read
+ 1069              		.syntax unified
+ 1070              		.thumb
+ 1071              		.thumb_func
+ 1073              	tu_fifo_read:
+ 1074              		@ args = 0, pretend = 0, frame = 0
+ 1075              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1076              		@ link register save eliminated.
+ 1077 0000 B0F808C0 		ldrh	ip, [r0, #8]
+ 1078 0004 4389     		ldrh	r3, [r0, #10]
+ 1079 0006 8288     		ldrh	r2, [r0, #4]
+ 1080 0008 1FFA8CFC 		uxth	ip, ip
+ 1081 000c 9BB2     		uxth	r3, r3
+ 1082 000e 9C45     		cmp	ip, r3
+ 1083 0010 10B4     		push	{r4}
+ 1084 0012 B6BF     		itet	lt
+ 1085 0014 C3EB4204 		rsblt	r4, r3, r2, lsl #1
+ 1086 0018 ACEB0304 		subge	r4, ip, r3
+ 1087 001c 6444     		addlt	r4, r4, ip
+ 1088 001e A4B2     		uxth	r4, r4
+ 1089 0020 34B3     		cbz	r4, .L265
+ 1090 0022 A242     		cmp	r2, r4
+ 1091 0024 0BD2     		bcs	.L270
+ 1092 0026 9445     		cmp	ip, r2
+ 1093 0028 2CBF     		ite	cs
+ 1094 002a ACEB020C 		subcs	ip, ip, r2
+ 1095 002e 9444     		addcc	ip, ip, r2
+ 1096 0030 1FFA8CF3 		uxth	r3, ip
+ 1097 0034 9A42     		cmp	r2, r3
+ 1098 0036 4381     		strh	r3, [r0, #10]	@ movhi
+ 1099 0038 03D8     		bhi	.L271
+ 1100              	.L262:
+ 1101 003a 9B1A     		subs	r3, r3, r2
+ 1102 003c 9BB2     		uxth	r3, r3
+ 1103              	.L270:
+ 1104 003e 9A42     		cmp	r2, r3
+ARM GAS  /tmp/ccUpsPzb.s 			page 20
+
+
+ 1105 0040 FBD9     		bls	.L262
+ 1106              	.L271:
+ 1107 0042 0268     		ldr	r2, [r0]
+ 1108 0044 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 1109 0046 0B70     		strb	r3, [r1]
+ 1110 0048 4289     		ldrh	r2, [r0, #10]
+ 1111 004a 8188     		ldrh	r1, [r0, #4]
+ 1112 004c 92B2     		uxth	r2, r2
+ 1113 004e 531C     		adds	r3, r2, #1
+ 1114 0050 9BB2     		uxth	r3, r3
+ 1115 0052 9A42     		cmp	r2, r3
+ 1116 0054 4FEA4102 		lsl	r2, r1, #1
+ 1117 0058 06D9     		bls	.L268
+ 1118              	.L263:
+ 1119 005a 9B1A     		subs	r3, r3, r2
+ 1120 005c 9BB2     		uxth	r3, r3
+ 1121              	.L264:
+ 1122 005e 4381     		strh	r3, [r0, #10]	@ movhi
+ 1123 0060 5DF8044B 		ldr	r4, [sp], #4
+ 1124 0064 0120     		movs	r0, #1
+ 1125 0066 7047     		bx	lr
+ 1126              	.L268:
+ 1127 0068 B3EB410F 		cmp	r3, r1, lsl #1
+ 1128 006c F7DB     		blt	.L264
+ 1129 006e F4E7     		b	.L263
+ 1130              	.L265:
+ 1131 0070 2046     		mov	r0, r4
+ 1132 0072 5DF8044B 		ldr	r4, [sp], #4
+ 1133 0076 7047     		bx	lr
+ 1135              		.section	.text.tu_fifo_peek,"ax",%progbits
+ 1136              		.align	1
+ 1137              		.p2align 2,,3
+ 1138              		.global	tu_fifo_peek
+ 1139              		.syntax unified
+ 1140              		.thumb
+ 1141              		.thumb_func
+ 1143              	tu_fifo_peek:
+ 1144              		@ args = 0, pretend = 0, frame = 0
+ 1145              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1146              		@ link register save eliminated.
+ 1147 0000 B0F808C0 		ldrh	ip, [r0, #8]
+ 1148 0004 4389     		ldrh	r3, [r0, #10]
+ 1149 0006 8288     		ldrh	r2, [r0, #4]
+ 1150 0008 1FFA8CFC 		uxth	ip, ip
+ 1151 000c 9BB2     		uxth	r3, r3
+ 1152 000e 9C45     		cmp	ip, r3
+ 1153 0010 10B4     		push	{r4}
+ 1154 0012 B6BF     		itet	lt
+ 1155 0014 C3EB4204 		rsblt	r4, r3, r2, lsl #1
+ 1156 0018 ACEB0304 		subge	r4, ip, r3
+ 1157 001c 6444     		addlt	r4, r4, ip
+ 1158 001e A4B2     		uxth	r4, r4
+ 1159 0020 B4B1     		cbz	r4, .L281
+ 1160 0022 A242     		cmp	r2, r4
+ 1161 0024 0BD2     		bcs	.L284
+ 1162 0026 9445     		cmp	ip, r2
+ 1163 0028 2CBF     		ite	cs
+ARM GAS  /tmp/ccUpsPzb.s 			page 21
+
+
+ 1164 002a ACEB020C 		subcs	ip, ip, r2
+ 1165 002e 9444     		addcc	ip, ip, r2
+ 1166 0030 1FFA8CF3 		uxth	r3, ip
+ 1167 0034 9A42     		cmp	r2, r3
+ 1168 0036 4381     		strh	r3, [r0, #10]	@ movhi
+ 1169 0038 03D8     		bhi	.L285
+ 1170              	.L280:
+ 1171 003a 9B1A     		subs	r3, r3, r2
+ 1172 003c 9BB2     		uxth	r3, r3
+ 1173              	.L284:
+ 1174 003e 9A42     		cmp	r2, r3
+ 1175 0040 FBD9     		bls	.L280
+ 1176              	.L285:
+ 1177 0042 0268     		ldr	r2, [r0]
+ 1178 0044 5DF8044B 		ldr	r4, [sp], #4
+ 1179 0048 D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 1180 004a 0B70     		strb	r3, [r1]
+ 1181 004c 0120     		movs	r0, #1
+ 1182 004e 7047     		bx	lr
+ 1183              	.L281:
+ 1184 0050 2046     		mov	r0, r4
+ 1185 0052 5DF8044B 		ldr	r4, [sp], #4
+ 1186 0056 7047     		bx	lr
+ 1188              		.section	.text.tu_fifo_write,"ax",%progbits
+ 1189              		.align	1
+ 1190              		.p2align 2,,3
+ 1191              		.global	tu_fifo_write
+ 1192              		.syntax unified
+ 1193              		.thumb
+ 1194              		.thumb_func
+ 1196              	tu_fifo_write:
+ 1197              		@ args = 0, pretend = 0, frame = 0
+ 1198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1199 0000 8446     		mov	ip, r0
+ 1200 0002 00B5     		push	{lr}
+ 1201 0004 B0F808E0 		ldrh	lr, [r0, #8]
+ 1202 0008 0389     		ldrh	r3, [r0, #8]
+ 1203 000a 4089     		ldrh	r0, [r0, #10]
+ 1204 000c BCF80420 		ldrh	r2, [ip, #4]
+ 1205 0010 9BB2     		uxth	r3, r3
+ 1206 0012 80B2     		uxth	r0, r0
+ 1207 0014 8342     		cmp	r3, r0
+ 1208 0016 B6BF     		itet	lt
+ 1209 0018 C0EB4200 		rsblt	r0, r0, r2, lsl #1
+ 1210 001c 1B1A     		subge	r3, r3, r0
+ 1211 001e 1B18     		addlt	r3, r3, r0
+ 1212 0020 9BB2     		uxth	r3, r3
+ 1213 0022 9A42     		cmp	r2, r3
+ 1214 0024 1FFA8EFE 		uxth	lr, lr
+ 1215 0028 02D8     		bhi	.L289
+ 1216 002a 9CF80600 		ldrb	r0, [ip, #6]	@ zero_extendqisi2
+ 1217 002e C0B1     		cbz	r0, .L297
+ 1218              	.L289:
+ 1219 0030 9645     		cmp	lr, r2
+ 1220 0032 18D3     		bcc	.L291
+ 1221 0034 7346     		mov	r3, lr
+ 1222              	.L292:
+ARM GAS  /tmp/ccUpsPzb.s 			page 22
+
+
+ 1223 0036 9B1A     		subs	r3, r3, r2
+ 1224 0038 9BB2     		uxth	r3, r3
+ 1225 003a 9A42     		cmp	r2, r3
+ 1226 003c FBD9     		bls	.L292
+ 1227 003e DCF80020 		ldr	r2, [ip]
+ 1228 0042 0978     		ldrb	r1, [r1]	@ zero_extendqisi2
+ 1229 0044 D154     		strb	r1, [r2, r3]
+ 1230 0046 0EF10103 		add	r3, lr, #1
+ 1231 004a 9BB2     		uxth	r3, r3
+ 1232 004c 9E45     		cmp	lr, r3
+ 1233 004e BCF80420 		ldrh	r2, [ip, #4]
+ 1234 0052 13D9     		bls	.L295
+ 1235 0054 0023     		movs	r3, #0
+ 1236 0056 5100     		lsls	r1, r2, #1
+ 1237              	.L293:
+ 1238 0058 5B1A     		subs	r3, r3, r1
+ 1239 005a 9BB2     		uxth	r3, r3
+ 1240              	.L294:
+ 1241 005c ACF80830 		strh	r3, [ip, #8]	@ movhi
+ 1242 0060 0120     		movs	r0, #1
+ 1243              	.L297:
+ 1244 0062 5DF804FB 		ldr	pc, [sp], #4
+ 1245              	.L291:
+ 1246 0066 DCF80030 		ldr	r3, [ip]
+ 1247 006a 0A78     		ldrb	r2, [r1]	@ zero_extendqisi2
+ 1248 006c 03F80E20 		strb	r2, [r3, lr]
+ 1249 0070 0EF1010E 		add	lr, lr, #1
+ 1250 0074 BCF80420 		ldrh	r2, [ip, #4]
+ 1251 0078 1FFA8EF3 		uxth	r3, lr
+ 1252              	.L295:
+ 1253 007c B3EB420F 		cmp	r3, r2, lsl #1
+ 1254 0080 4FEA4201 		lsl	r1, r2, #1
+ 1255 0084 EADB     		blt	.L294
+ 1256 0086 E7E7     		b	.L293
+ 1258              		.section	.text.tu_fifo_advance_write_pointer,"ax",%progbits
+ 1259              		.align	1
+ 1260              		.p2align 2,,3
+ 1261              		.global	tu_fifo_advance_write_pointer
+ 1262              		.syntax unified
+ 1263              		.thumb
+ 1264              		.thumb_func
+ 1266              	tu_fifo_advance_write_pointer:
+ 1267              		@ args = 0, pretend = 0, frame = 0
+ 1268              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1269              		@ link register save eliminated.
+ 1270 0000 0389     		ldrh	r3, [r0, #8]
+ 1271 0002 8288     		ldrh	r2, [r0, #4]
+ 1272 0004 9BB2     		uxth	r3, r3
+ 1273 0006 1944     		add	r1, r1, r3
+ 1274 0008 89B2     		uxth	r1, r1
+ 1275 000a 8B42     		cmp	r3, r1
+ 1276 000c 4FEA4203 		lsl	r3, r2, #1
+ 1277 0010 02D8     		bhi	.L304
+ 1278 0012 B1EB420F 		cmp	r1, r2, lsl #1
+ 1279 0016 01DB     		blt	.L305
+ 1280              	.L304:
+ 1281 0018 C91A     		subs	r1, r1, r3
+ARM GAS  /tmp/ccUpsPzb.s 			page 23
+
+
+ 1282 001a 89B2     		uxth	r1, r1
+ 1283              	.L305:
+ 1284 001c 0181     		strh	r1, [r0, #8]	@ movhi
+ 1285 001e 7047     		bx	lr
+ 1287              		.section	.text.tu_fifo_correct_read_pointer,"ax",%progbits
+ 1288              		.align	1
+ 1289              		.p2align 2,,3
+ 1290              		.global	tu_fifo_correct_read_pointer
+ 1291              		.syntax unified
+ 1292              		.thumb
+ 1293              		.thumb_func
+ 1295              	tu_fifo_correct_read_pointer:
+ 1296              		@ args = 0, pretend = 0, frame = 0
+ 1297              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1298              		@ link register save eliminated.
+ 1299 0000 0389     		ldrh	r3, [r0, #8]
+ 1300 0002 8288     		ldrh	r2, [r0, #4]
+ 1301 0004 9BB2     		uxth	r3, r3
+ 1302 0006 9342     		cmp	r3, r2
+ 1303 0008 2CBF     		ite	cs
+ 1304 000a 9B1A     		subcs	r3, r3, r2
+ 1305 000c 9B18     		addcc	r3, r3, r2
+ 1306 000e 9BB2     		uxth	r3, r3
+ 1307 0010 4381     		strh	r3, [r0, #10]	@ movhi
+ 1308 0012 7047     		bx	lr
+ 1310              		.section	.text.tu_fifo_advance_read_pointer,"ax",%progbits
+ 1311              		.align	1
+ 1312              		.p2align 2,,3
+ 1313              		.global	tu_fifo_advance_read_pointer
+ 1314              		.syntax unified
+ 1315              		.thumb
+ 1316              		.thumb_func
+ 1318              	tu_fifo_advance_read_pointer:
+ 1319              		@ args = 0, pretend = 0, frame = 0
+ 1320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1321              		@ link register save eliminated.
+ 1322 0000 4389     		ldrh	r3, [r0, #10]
+ 1323 0002 8288     		ldrh	r2, [r0, #4]
+ 1324 0004 9BB2     		uxth	r3, r3
+ 1325 0006 1944     		add	r1, r1, r3
+ 1326 0008 89B2     		uxth	r1, r1
+ 1327 000a 8B42     		cmp	r3, r1
+ 1328 000c 4FEA4203 		lsl	r3, r2, #1
+ 1329 0010 02D8     		bhi	.L312
+ 1330 0012 B1EB420F 		cmp	r1, r2, lsl #1
+ 1331 0016 01DB     		blt	.L313
+ 1332              	.L312:
+ 1333 0018 C91A     		subs	r1, r1, r3
+ 1334 001a 89B2     		uxth	r1, r1
+ 1335              	.L313:
+ 1336 001c 4181     		strh	r1, [r0, #10]	@ movhi
+ 1337 001e 7047     		bx	lr
+ 1339              		.section	.text.tu_fifo_get_read_info,"ax",%progbits
+ 1340              		.align	1
+ 1341              		.p2align 2,,3
+ 1342              		.global	tu_fifo_get_read_info
+ 1343              		.syntax unified
+ARM GAS  /tmp/ccUpsPzb.s 			page 24
+
+
+ 1344              		.thumb
+ 1345              		.thumb_func
+ 1347              	tu_fifo_get_read_info:
+ 1348              		@ args = 0, pretend = 0, frame = 0
+ 1349              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1350              		@ link register save eliminated.
+ 1351 0000 0289     		ldrh	r2, [r0, #8]
+ 1352 0002 4389     		ldrh	r3, [r0, #10]
+ 1353 0004 70B4     		push	{r4, r5, r6}
+ 1354 0006 92B2     		uxth	r2, r2
+ 1355 0008 9BB2     		uxth	r3, r3
+ 1356 000a 8588     		ldrh	r5, [r0, #4]
+ 1357 000c 9A42     		cmp	r2, r3
+ 1358 000e B6BF     		itet	lt
+ 1359 0010 C3EB4504 		rsblt	r4, r3, r5, lsl #1
+ 1360 0014 D41A     		subge	r4, r2, r3
+ 1361 0016 A418     		addlt	r4, r4, r2
+ 1362 0018 A4B2     		uxth	r4, r4
+ 1363 001a A542     		cmp	r5, r4
+ 1364 001c 20D2     		bcs	.L319
+ 1365 001e 9542     		cmp	r5, r2
+ 1366 0020 15D9     		bls	.L344
+ 1367 0022 AB18     		adds	r3, r5, r2
+ 1368 0024 9BB2     		uxth	r3, r3
+ 1369 0026 4381     		strh	r3, [r0, #10]	@ movhi
+ 1370 0028 2C46     		mov	r4, r5
+ 1371 002a 01E0     		b	.L343
+ 1372              	.L327:
+ 1373 002c 5B1B     		subs	r3, r3, r5
+ 1374 002e 9BB2     		uxth	r3, r3
+ 1375              	.L343:
+ 1376 0030 9D42     		cmp	r5, r3
+ 1377 0032 FBD9     		bls	.L327
+ 1378 0034 0068     		ldr	r0, [r0]
+ 1379 0036 9342     		cmp	r3, r2
+ 1380 0038 00EB0306 		add	r6, r0, r3
+ 1381 003c 4E60     		str	r6, [r1, #4]
+ 1382 003e 17D2     		bcs	.L328
+ 1383 0040 0023     		movs	r3, #0
+ 1384 0042 0C80     		strh	r4, [r1]	@ movhi
+ 1385 0044 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1386              	.L329:
+ 1387 0046 0020     		movs	r0, #0
+ 1388 0048 70BC     		pop	{r4, r5, r6}
+ 1389 004a C860     		str	r0, [r1, #12]
+ 1390 004c 7047     		bx	lr
+ 1391              	.L344:
+ 1392 004e 521B     		subs	r2, r2, r5
+ 1393 0050 93B2     		uxth	r3, r2
+ 1394 0052 4381     		strh	r3, [r0, #10]	@ movhi
+ 1395 0054 A5B9     		cbnz	r5, .L345
+ 1396              	.L321:
+ 1397 0056 0023     		movs	r3, #0
+ 1398 0058 0B80     		strh	r3, [r1]	@ movhi
+ 1399 005a 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1400 005c 4B60     		str	r3, [r1, #4]
+ 1401 005e F2E7     		b	.L329
+ARM GAS  /tmp/ccUpsPzb.s 			page 25
+
+
+ 1402              	.L319:
+ 1403 0060 002C     		cmp	r4, #0
+ 1404 0062 F8D0     		beq	.L321
+ 1405 0064 01E0     		b	.L342
+ 1406              	.L346:
+ 1407 0066 521B     		subs	r2, r2, r5
+ 1408              	.L325:
+ 1409 0068 92B2     		uxth	r2, r2
+ 1410              	.L342:
+ 1411 006a 9542     		cmp	r5, r2
+ 1412 006c FBD9     		bls	.L346
+ 1413 006e DFE7     		b	.L343
+ 1414              	.L328:
+ 1415 0070 641B     		subs	r4, r4, r5
+ 1416 0072 EA1A     		subs	r2, r5, r3
+ 1417 0074 2344     		add	r3, r3, r4
+ 1418 0076 0A80     		strh	r2, [r1]	@ movhi
+ 1419 0078 70BC     		pop	{r4, r5, r6}
+ 1420 007a 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1421 007c C860     		str	r0, [r1, #12]
+ 1422 007e 7047     		bx	lr
+ 1423              	.L345:
+ 1424 0080 2C46     		mov	r4, r5
+ 1425 0082 F1E7     		b	.L325
+ 1427              		.section	.text.tu_fifo_get_write_info,"ax",%progbits
+ 1428              		.align	1
+ 1429              		.p2align 2,,3
+ 1430              		.global	tu_fifo_get_write_info
+ 1431              		.syntax unified
+ 1432              		.thumb
+ 1433              		.thumb_func
+ 1435              	tu_fifo_get_write_info:
+ 1436              		@ args = 0, pretend = 0, frame = 0
+ 1437              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1438 0000 0389     		ldrh	r3, [r0, #8]
+ 1439 0002 4289     		ldrh	r2, [r0, #10]
+ 1440 0004 B0F804C0 		ldrh	ip, [r0, #4]
+ 1441 0008 9BB2     		uxth	r3, r3
+ 1442 000a 92B2     		uxth	r2, r2
+ 1443 000c 9342     		cmp	r3, r2
+ 1444 000e 10B5     		push	{r4, lr}
+ 1445 0010 B6BF     		itet	lt
+ 1446 0012 C2EB4C0E 		rsblt	lr, r2, ip, lsl #1
+ 1447 0016 A3EB020E 		subge	lr, r3, r2
+ 1448 001a 9E44     		addlt	lr, lr, r3
+ 1449 001c 1FFA8EFE 		uxth	lr, lr
+ 1450 0020 F445     		cmp	ip, lr
+ 1451 0022 09D8     		bhi	.L362
+ 1452 0024 0023     		movs	r3, #0
+ 1453 0026 0B80     		strh	r3, [r1]	@ movhi
+ 1454 0028 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1455 002a 4B60     		str	r3, [r1, #4]
+ 1456              	.L357:
+ 1457 002c 0020     		movs	r0, #0
+ 1458 002e C860     		str	r0, [r1, #12]
+ 1459 0030 10BD     		pop	{r4, pc}
+ 1460              	.L351:
+ARM GAS  /tmp/ccUpsPzb.s 			page 26
+
+
+ 1461 0032 A3EB0C03 		sub	r3, r3, ip
+ 1462 0036 9BB2     		uxth	r3, r3
+ 1463              	.L362:
+ 1464 0038 9C45     		cmp	ip, r3
+ 1465 003a FAD9     		bls	.L351
+ 1466 003c 9445     		cmp	ip, r2
+ 1467 003e 04D8     		bhi	.L364
+ 1468              	.L355:
+ 1469 0040 A2EB0C02 		sub	r2, r2, ip
+ 1470 0044 92B2     		uxth	r2, r2
+ 1471 0046 9445     		cmp	ip, r2
+ 1472 0048 FAD9     		bls	.L355
+ 1473              	.L364:
+ 1474 004a 0068     		ldr	r0, [r0]
+ 1475 004c 9A42     		cmp	r2, r3
+ 1476 004e 00EB0304 		add	r4, r0, r3
+ 1477 0052 4C60     		str	r4, [r1, #4]
+ 1478 0054 04D9     		bls	.L356
+ 1479 0056 D21A     		subs	r2, r2, r3
+ 1480 0058 0023     		movs	r3, #0
+ 1481 005a 0A80     		strh	r2, [r1]	@ movhi
+ 1482 005c 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1483 005e E5E7     		b	.L357
+ 1484              	.L356:
+ 1485 0060 ACEB030C 		sub	ip, ip, r3
+ 1486 0064 A3EB0E03 		sub	r3, r3, lr
+ 1487 0068 A1F800C0 		strh	ip, [r1]	@ movhi
+ 1488 006c 0B81     		strh	r3, [r1, #8]	@ movhi
+ 1489 006e C860     		str	r0, [r1, #12]
+ 1490 0070 10BD     		pop	{r4, pc}
+ 1492 0072 00BF     		.ident	"GCC: (15:13.2.rel1-2) 13.2.1 20231009"
+ARM GAS  /tmp/ccUpsPzb.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 tusb_fifo.c
+     /tmp/ccUpsPzb.s:18     .text.tu_fifo_config:00000000 $t
+     /tmp/ccUpsPzb.s:25     .text.tu_fifo_config:00000000 tu_fifo_config
+     /tmp/ccUpsPzb.s:44     .text.tu_fifo_clear:00000000 $t
+     /tmp/ccUpsPzb.s:51     .text.tu_fifo_clear:00000000 tu_fifo_clear
+     /tmp/ccUpsPzb.s:61     .text.tu_fifo_set_overwritable:00000000 $t
+     /tmp/ccUpsPzb.s:68     .text.tu_fifo_set_overwritable:00000000 tu_fifo_set_overwritable
+     /tmp/ccUpsPzb.s:79     .text.tu_hwfifo_write:00000000 $t
+     /tmp/ccUpsPzb.s:86     .text.tu_hwfifo_write:00000000 tu_hwfifo_write
+     /tmp/ccUpsPzb.s:125    .text.tu_hwfifo_read:00000000 $t
+     /tmp/ccUpsPzb.s:132    .text.tu_hwfifo_read:00000000 tu_hwfifo_read
+     /tmp/ccUpsPzb.s:170    .text.tu_fifo_peek_n_access_mode:00000000 $t
+     /tmp/ccUpsPzb.s:177    .text.tu_fifo_peek_n_access_mode:00000000 tu_fifo_peek_n_access_mode
+     /tmp/ccUpsPzb.s:375    .text.tu_fifo_peek_n:00000000 $t
+     /tmp/ccUpsPzb.s:382    .text.tu_fifo_peek_n:00000000 tu_fifo_peek_n
+     /tmp/ccUpsPzb.s:449    .text.tu_fifo_read_n_access_mode:00000000 $t
+     /tmp/ccUpsPzb.s:456    .text.tu_fifo_read_n_access_mode:00000000 tu_fifo_read_n_access_mode
+     /tmp/ccUpsPzb.s:690    .text.tu_fifo_write_n_access_mode:00000000 $t
+     /tmp/ccUpsPzb.s:697    .text.tu_fifo_write_n_access_mode:00000000 tu_fifo_write_n_access_mode
+     /tmp/ccUpsPzb.s:1019   .text.tu_fifo_discard_n:00000000 $t
+     /tmp/ccUpsPzb.s:1026   .text.tu_fifo_discard_n:00000000 tu_fifo_discard_n
+     /tmp/ccUpsPzb.s:1066   .text.tu_fifo_read:00000000 $t
+     /tmp/ccUpsPzb.s:1073   .text.tu_fifo_read:00000000 tu_fifo_read
+     /tmp/ccUpsPzb.s:1136   .text.tu_fifo_peek:00000000 $t
+     /tmp/ccUpsPzb.s:1143   .text.tu_fifo_peek:00000000 tu_fifo_peek
+     /tmp/ccUpsPzb.s:1189   .text.tu_fifo_write:00000000 $t
+     /tmp/ccUpsPzb.s:1196   .text.tu_fifo_write:00000000 tu_fifo_write
+     /tmp/ccUpsPzb.s:1259   .text.tu_fifo_advance_write_pointer:00000000 $t
+     /tmp/ccUpsPzb.s:1266   .text.tu_fifo_advance_write_pointer:00000000 tu_fifo_advance_write_pointer
+     /tmp/ccUpsPzb.s:1288   .text.tu_fifo_correct_read_pointer:00000000 $t
+     /tmp/ccUpsPzb.s:1295   .text.tu_fifo_correct_read_pointer:00000000 tu_fifo_correct_read_pointer
+     /tmp/ccUpsPzb.s:1311   .text.tu_fifo_advance_read_pointer:00000000 $t
+     /tmp/ccUpsPzb.s:1318   .text.tu_fifo_advance_read_pointer:00000000 tu_fifo_advance_read_pointer
+     /tmp/ccUpsPzb.s:1340   .text.tu_fifo_get_read_info:00000000 $t
+     /tmp/ccUpsPzb.s:1347   .text.tu_fifo_get_read_info:00000000 tu_fifo_get_read_info
+     /tmp/ccUpsPzb.s:1428   .text.tu_fifo_get_write_info:00000000 $t
+     /tmp/ccUpsPzb.s:1435   .text.tu_fifo_get_write_info:00000000 tu_fifo_get_write_info
+
+UNDEFINED SYMBOLS
+memcpy

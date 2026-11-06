@@ -20,7 +20,7 @@ extern "C" {
 // Change the value below to switch roles.
 //-----------------------------------------------------------------------------
 #ifndef USB_MODE
-#define USB_MODE            USB_MODE_HOST
+#define USB_MODE            USB_MODE_DEVICE
 #endif
 
 #ifndef USB_MODE_HOST

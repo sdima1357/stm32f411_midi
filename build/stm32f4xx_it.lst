@@ -1,0 +1,209 @@
+ARM GAS  /tmp/ccfvzYZd.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32f4xx_it.c"
+  16              		.text
+  17              		.section	.text.NMI_Handler,"ax",%progbits
+  18              		.align	1
+  19              		.p2align 2,,3
+  20              		.global	NMI_Handler
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	NMI_Handler:
+  26              		@ Volatile: function does not return.
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.L2:
+  31 0000 FEE7     		b	.L2
+  33 0002 00BF     		.section	.text.HardFault_Handler,"ax",%progbits
+  34              		.align	1
+  35              		.p2align 2,,3
+  36              		.global	HardFault_Handler
+  37              		.syntax unified
+  38              		.thumb
+  39              		.thumb_func
+  41              	HardFault_Handler:
+  42              		@ Volatile: function does not return.
+  43              		@ args = 0, pretend = 0, frame = 0
+  44              		@ frame_needed = 0, uses_anonymous_args = 0
+  45              		@ link register save eliminated.
+  46              	.L5:
+  47 0000 FEE7     		b	.L5
+  49 0002 00BF     		.section	.text.MemManage_Handler,"ax",%progbits
+  50              		.align	1
+  51              		.p2align 2,,3
+  52              		.global	MemManage_Handler
+  53              		.syntax unified
+  54              		.thumb
+  55              		.thumb_func
+  57              	MemManage_Handler:
+  58              		@ Volatile: function does not return.
+  59              		@ args = 0, pretend = 0, frame = 0
+  60              		@ frame_needed = 0, uses_anonymous_args = 0
+  61              		@ link register save eliminated.
+  62              	.L7:
+ARM GAS  /tmp/ccfvzYZd.s 			page 2
+
+
+  63 0000 FEE7     		b	.L7
+  65 0002 00BF     		.section	.text.BusFault_Handler,"ax",%progbits
+  66              		.align	1
+  67              		.p2align 2,,3
+  68              		.global	BusFault_Handler
+  69              		.syntax unified
+  70              		.thumb
+  71              		.thumb_func
+  73              	BusFault_Handler:
+  74              		@ Volatile: function does not return.
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77              		@ link register save eliminated.
+  78              	.L9:
+  79 0000 FEE7     		b	.L9
+  81 0002 00BF     		.section	.text.UsageFault_Handler,"ax",%progbits
+  82              		.align	1
+  83              		.p2align 2,,3
+  84              		.global	UsageFault_Handler
+  85              		.syntax unified
+  86              		.thumb
+  87              		.thumb_func
+  89              	UsageFault_Handler:
+  90              		@ Volatile: function does not return.
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		@ link register save eliminated.
+  94              	.L11:
+  95 0000 FEE7     		b	.L11
+  97 0002 00BF     		.section	.text.SVC_Handler,"ax",%progbits
+  98              		.align	1
+  99              		.p2align 2,,3
+ 100              		.global	SVC_Handler
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 105              	SVC_Handler:
+ 106              		@ args = 0, pretend = 0, frame = 0
+ 107              		@ frame_needed = 0, uses_anonymous_args = 0
+ 108              		@ link register save eliminated.
+ 109 0000 7047     		bx	lr
+ 111 0002 00BF     		.section	.text.DebugMon_Handler,"ax",%progbits
+ 112              		.align	1
+ 113              		.p2align 2,,3
+ 114              		.global	DebugMon_Handler
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 119              	DebugMon_Handler:
+ 120              		@ args = 0, pretend = 0, frame = 0
+ 121              		@ frame_needed = 0, uses_anonymous_args = 0
+ 122              		@ link register save eliminated.
+ 123 0000 7047     		bx	lr
+ 125 0002 00BF     		.section	.text.PendSV_Handler,"ax",%progbits
+ 126              		.align	1
+ 127              		.p2align 2,,3
+ 128              		.global	PendSV_Handler
+ARM GAS  /tmp/ccfvzYZd.s 			page 3
+
+
+ 129              		.syntax unified
+ 130              		.thumb
+ 131              		.thumb_func
+ 133              	PendSV_Handler:
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              		@ link register save eliminated.
+ 137 0000 7047     		bx	lr
+ 139 0002 00BF     		.section	.text.SysTick_Handler,"ax",%progbits
+ 140              		.align	1
+ 141              		.p2align 2,,3
+ 142              		.global	SysTick_Handler
+ 143              		.syntax unified
+ 144              		.thumb
+ 145              		.thumb_func
+ 147              	SysTick_Handler:
+ 148              		@ args = 0, pretend = 0, frame = 0
+ 149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150              		@ link register save eliminated.
+ 151 0000 FFF7FEBF 		b	HAL_IncTick
+ 153              		.section	.text.DMA2_Stream2_IRQHandler,"ax",%progbits
+ 154              		.align	1
+ 155              		.p2align 2,,3
+ 156              		.global	DMA2_Stream2_IRQHandler
+ 157              		.syntax unified
+ 158              		.thumb
+ 159              		.thumb_func
+ 161              	DMA2_Stream2_IRQHandler:
+ 162              		@ args = 0, pretend = 0, frame = 0
+ 163              		@ frame_needed = 0, uses_anonymous_args = 0
+ 164              		@ link register save eliminated.
+ 165 0000 0148     		ldr	r0, .L17
+ 166 0002 FFF7FEBF 		b	HAL_DMA_IRQHandler
+ 167              	.L18:
+ 168 0006 00BF     		.align	2
+ 169              	.L17:
+ 170 0008 00000000 		.word	hdma_spi1_tx
+ 172              		.section	.text.OTG_FS_IRQHandler,"ax",%progbits
+ 173              		.align	1
+ 174              		.p2align 2,,3
+ 175              		.global	OTG_FS_IRQHandler
+ 176              		.syntax unified
+ 177              		.thumb
+ 178              		.thumb_func
+ 180              	OTG_FS_IRQHandler:
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 183              		@ link register save eliminated.
+ 184 0000 0121     		movs	r1, #1
+ 185 0002 0020     		movs	r0, #0
+ 186 0004 FFF7FEBF 		b	tusb_int_handler
+ 188              		.ident	"GCC: (15:13.2.rel1-2) 13.2.1 20231009"
+ARM GAS  /tmp/ccfvzYZd.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f4xx_it.c
+     /tmp/ccfvzYZd.s:18     .text.NMI_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:25     .text.NMI_Handler:00000000 NMI_Handler
+     /tmp/ccfvzYZd.s:34     .text.HardFault_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:41     .text.HardFault_Handler:00000000 HardFault_Handler
+     /tmp/ccfvzYZd.s:50     .text.MemManage_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:57     .text.MemManage_Handler:00000000 MemManage_Handler
+     /tmp/ccfvzYZd.s:66     .text.BusFault_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:73     .text.BusFault_Handler:00000000 BusFault_Handler
+     /tmp/ccfvzYZd.s:82     .text.UsageFault_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:89     .text.UsageFault_Handler:00000000 UsageFault_Handler
+     /tmp/ccfvzYZd.s:98     .text.SVC_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:105    .text.SVC_Handler:00000000 SVC_Handler
+     /tmp/ccfvzYZd.s:112    .text.DebugMon_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:119    .text.DebugMon_Handler:00000000 DebugMon_Handler
+     /tmp/ccfvzYZd.s:126    .text.PendSV_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:133    .text.PendSV_Handler:00000000 PendSV_Handler
+     /tmp/ccfvzYZd.s:140    .text.SysTick_Handler:00000000 $t
+     /tmp/ccfvzYZd.s:147    .text.SysTick_Handler:00000000 SysTick_Handler
+     /tmp/ccfvzYZd.s:154    .text.DMA2_Stream2_IRQHandler:00000000 $t
+     /tmp/ccfvzYZd.s:161    .text.DMA2_Stream2_IRQHandler:00000000 DMA2_Stream2_IRQHandler
+     /tmp/ccfvzYZd.s:170    .text.DMA2_Stream2_IRQHandler:00000008 $d
+     /tmp/ccfvzYZd.s:173    .text.OTG_FS_IRQHandler:00000000 $t
+     /tmp/ccfvzYZd.s:180    .text.OTG_FS_IRQHandler:00000000 OTG_FS_IRQHandler
+
+UNDEFINED SYMBOLS
+HAL_IncTick
+HAL_DMA_IRQHandler
+hdma_spi1_tx
+tusb_int_handler

@@ -1,0 +1,379 @@
+ARM GAS  /tmp/ccLioEMv.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32f4xx_hal_pwr_ex.c"
+  16              		.text
+  17              		.section	.text.HAL_PWREx_EnableBkUpReg,"ax",%progbits
+  18              		.align	1
+  19              		.p2align 2,,3
+  20              		.global	HAL_PWREx_EnableBkUpReg
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	HAL_PWREx_EnableBkUpReg:
+  26              		@ args = 0, pretend = 0, frame = 0
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28 0000 38B5     		push	{r3, r4, r5, lr}
+  29 0002 0B4B     		ldr	r3, .L8
+  30 0004 0B4D     		ldr	r5, .L8+4
+  31 0006 0122     		movs	r2, #1
+  32 0008 C3F8A420 		str	r2, [r3, #164]
+  33 000c FFF7FEFF 		bl	HAL_GetTick
+  34 0010 0446     		mov	r4, r0
+  35 0012 05E0     		b	.L2
+  36              	.L4:
+  37 0014 FFF7FEFF 		bl	HAL_GetTick
+  38 0018 001B     		subs	r0, r0, r4
+  39 001a B0F57A7F 		cmp	r0, #1000
+  40 001e 04D8     		bhi	.L5
+  41              	.L2:
+  42 0020 6B68     		ldr	r3, [r5, #4]
+  43 0022 1B07     		lsls	r3, r3, #28
+  44 0024 F6D5     		bpl	.L4
+  45 0026 0020     		movs	r0, #0
+  46 0028 38BD     		pop	{r3, r4, r5, pc}
+  47              	.L5:
+  48 002a 0320     		movs	r0, #3
+  49 002c 38BD     		pop	{r3, r4, r5, pc}
+  50              	.L9:
+  51 002e 00BF     		.align	2
+  52              	.L8:
+  53 0030 00000E42 		.word	1108213760
+  54 0034 00700040 		.word	1073770496
+  56              		.section	.text.HAL_PWREx_DisableBkUpReg,"ax",%progbits
+  57              		.align	1
+  58              		.p2align 2,,3
+  59              		.global	HAL_PWREx_DisableBkUpReg
+ARM GAS  /tmp/ccLioEMv.s 			page 2
+
+
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  64              	HAL_PWREx_DisableBkUpReg:
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 0, uses_anonymous_args = 0
+  67 0000 38B5     		push	{r3, r4, r5, lr}
+  68 0002 0B4B     		ldr	r3, .L16
+  69 0004 0B4D     		ldr	r5, .L16+4
+  70 0006 0022     		movs	r2, #0
+  71 0008 C3F8A420 		str	r2, [r3, #164]
+  72 000c FFF7FEFF 		bl	HAL_GetTick
+  73 0010 0446     		mov	r4, r0
+  74 0012 05E0     		b	.L11
+  75              	.L13:
+  76 0014 FFF7FEFF 		bl	HAL_GetTick
+  77 0018 001B     		subs	r0, r0, r4
+  78 001a B0F57A7F 		cmp	r0, #1000
+  79 001e 05D8     		bhi	.L14
+  80              	.L11:
+  81 0020 6B68     		ldr	r3, [r5, #4]
+  82 0022 13F00803 		ands	r3, r3, #8
+  83 0026 F5D1     		bne	.L13
+  84 0028 1846     		mov	r0, r3
+  85 002a 38BD     		pop	{r3, r4, r5, pc}
+  86              	.L14:
+  87 002c 0320     		movs	r0, #3
+  88 002e 38BD     		pop	{r3, r4, r5, pc}
+  89              	.L17:
+  90              		.align	2
+  91              	.L16:
+  92 0030 00000E42 		.word	1108213760
+  93 0034 00700040 		.word	1073770496
+  95              		.section	.text.HAL_PWREx_EnableFlashPowerDown,"ax",%progbits
+  96              		.align	1
+  97              		.p2align 2,,3
+  98              		.global	HAL_PWREx_EnableFlashPowerDown
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 103              	HAL_PWREx_EnableFlashPowerDown:
+ 104              		@ args = 0, pretend = 0, frame = 0
+ 105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106              		@ link register save eliminated.
+ 107 0000 014B     		ldr	r3, .L19
+ 108 0002 0122     		movs	r2, #1
+ 109 0004 5A62     		str	r2, [r3, #36]
+ 110 0006 7047     		bx	lr
+ 111              	.L20:
+ 112              		.align	2
+ 113              	.L19:
+ 114 0008 00000E42 		.word	1108213760
+ 116              		.section	.text.HAL_PWREx_DisableFlashPowerDown,"ax",%progbits
+ 117              		.align	1
+ 118              		.p2align 2,,3
+ 119              		.global	HAL_PWREx_DisableFlashPowerDown
+ 120              		.syntax unified
+ARM GAS  /tmp/ccLioEMv.s 			page 3
+
+
+ 121              		.thumb
+ 122              		.thumb_func
+ 124              	HAL_PWREx_DisableFlashPowerDown:
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127              		@ link register save eliminated.
+ 128 0000 014B     		ldr	r3, .L22
+ 129 0002 0022     		movs	r2, #0
+ 130 0004 5A62     		str	r2, [r3, #36]
+ 131 0006 7047     		bx	lr
+ 132              	.L23:
+ 133              		.align	2
+ 134              	.L22:
+ 135 0008 00000E42 		.word	1108213760
+ 137              		.section	.text.HAL_PWREx_GetVoltageRange,"ax",%progbits
+ 138              		.align	1
+ 139              		.p2align 2,,3
+ 140              		.global	HAL_PWREx_GetVoltageRange
+ 141              		.syntax unified
+ 142              		.thumb
+ 143              		.thumb_func
+ 145              	HAL_PWREx_GetVoltageRange:
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		@ link register save eliminated.
+ 149 0000 024B     		ldr	r3, .L25
+ 150 0002 1868     		ldr	r0, [r3]
+ 151 0004 00F44040 		and	r0, r0, #49152
+ 152 0008 7047     		bx	lr
+ 153              	.L26:
+ 154 000a 00BF     		.align	2
+ 155              	.L25:
+ 156 000c 00700040 		.word	1073770496
+ 158              		.section	.text.HAL_PWREx_ControlVoltageScaling,"ax",%progbits
+ 159              		.align	1
+ 160              		.p2align 2,,3
+ 161              		.global	HAL_PWREx_ControlVoltageScaling
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 166              	HAL_PWREx_ControlVoltageScaling:
+ 167              		@ args = 0, pretend = 0, frame = 8
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169 0000 70B5     		push	{r4, r5, r6, lr}
+ 170 0002 82B0     		sub	sp, sp, #8
+ 171 0004 294C     		ldr	r4, .L39
+ 172 0006 0022     		movs	r2, #0
+ 173 0008 0092     		str	r2, [sp]
+ 174 000a 236C     		ldr	r3, [r4, #64]
+ 175 000c 43F08053 		orr	r3, r3, #268435456
+ 176 0010 2364     		str	r3, [r4, #64]
+ 177 0012 236C     		ldr	r3, [r4, #64]
+ 178 0014 03F08053 		and	r3, r3, #268435456
+ 179 0018 0093     		str	r3, [sp]
+ 180 001a 009B     		ldr	r3, [sp]
+ 181 001c A368     		ldr	r3, [r4, #8]
+ 182 001e 03F00C03 		and	r3, r3, #12
+ARM GAS  /tmp/ccLioEMv.s 			page 4
+
+
+ 183 0022 082B     		cmp	r3, #8
+ 184 0024 3ED0     		beq	.L36
+ 185 0026 224B     		ldr	r3, .L39+4
+ 186 0028 1A66     		str	r2, [r3, #96]
+ 187 002a 0646     		mov	r6, r0
+ 188 002c FFF7FEFF 		bl	HAL_GetTick
+ 189 0030 0546     		mov	r5, r0
+ 190 0032 04E0     		b	.L29
+ 191              	.L30:
+ 192 0034 FFF7FEFF 		bl	HAL_GetTick
+ 193 0038 431B     		subs	r3, r0, r5
+ 194 003a 022B     		cmp	r3, #2
+ 195 003c 2FD8     		bhi	.L32
+ 196              	.L29:
+ 197 003e 2368     		ldr	r3, [r4]
+ 198 0040 13F00073 		ands	r3, r3, #33554432
+ 199 0044 F6D1     		bne	.L30
+ 200 0046 1B4A     		ldr	r2, .L39+8
+ 201 0048 0193     		str	r3, [sp, #4]
+ 202 004a 1368     		ldr	r3, [r2]
+ 203 004c 1849     		ldr	r1, .L39+4
+ 204 004e 174D     		ldr	r5, .L39
+ 205 0050 23F44043 		bic	r3, r3, #49152
+ 206 0054 3343     		orrs	r3, r3, r6
+ 207 0056 1360     		str	r3, [r2]
+ 208 0058 1368     		ldr	r3, [r2]
+ 209 005a 03F44043 		and	r3, r3, #49152
+ 210 005e 0193     		str	r3, [sp, #4]
+ 211 0060 0122     		movs	r2, #1
+ 212 0062 019B     		ldr	r3, [sp, #4]
+ 213 0064 0A66     		str	r2, [r1, #96]
+ 214 0066 FFF7FEFF 		bl	HAL_GetTick
+ 215 006a 0446     		mov	r4, r0
+ 216 006c 04E0     		b	.L31
+ 217              	.L33:
+ 218 006e FFF7FEFF 		bl	HAL_GetTick
+ 219 0072 001B     		subs	r0, r0, r4
+ 220 0074 0228     		cmp	r0, #2
+ 221 0076 12D8     		bhi	.L32
+ 222              	.L31:
+ 223 0078 2B68     		ldr	r3, [r5]
+ 224 007a 9A01     		lsls	r2, r3, #6
+ 225 007c F7D5     		bpl	.L33
+ 226 007e FFF7FEFF 		bl	HAL_GetTick
+ 227 0082 0C4D     		ldr	r5, .L39+8
+ 228 0084 0446     		mov	r4, r0
+ 229 0086 05E0     		b	.L34
+ 230              	.L35:
+ 231 0088 FFF7FEFF 		bl	HAL_GetTick
+ 232 008c 001B     		subs	r0, r0, r4
+ 233 008e B0F57A7F 		cmp	r0, #1000
+ 234 0092 04D8     		bhi	.L32
+ 235              	.L34:
+ 236 0094 6B68     		ldr	r3, [r5, #4]
+ 237 0096 5B04     		lsls	r3, r3, #17
+ 238 0098 F6D5     		bpl	.L35
+ 239 009a 0020     		movs	r0, #0
+ARM GAS  /tmp/ccLioEMv.s 			page 5
+
+
+ 240 009c 00E0     		b	.L28
+ 241              	.L32:
+ 242 009e 0320     		movs	r0, #3
+ 243              	.L28:
+ 244 00a0 02B0     		add	sp, sp, #8
+ 245              		@ sp needed
+ 246 00a2 70BD     		pop	{r4, r5, r6, pc}
+ 247              	.L36:
+ 248 00a4 0120     		movs	r0, #1
+ 249 00a6 02B0     		add	sp, sp, #8
+ 250              		@ sp needed
+ 251 00a8 70BD     		pop	{r4, r5, r6, pc}
+ 252              	.L40:
+ 253 00aa 00BF     		.align	2
+ 254              	.L39:
+ 255 00ac 00380240 		.word	1073887232
+ 256 00b0 00004742 		.word	1111949312
+ 257 00b4 00700040 		.word	1073770496
+ 259              		.section	.text.HAL_PWREx_EnableMainRegulatorLowVoltage,"ax",%progbits
+ 260              		.align	1
+ 261              		.p2align 2,,3
+ 262              		.global	HAL_PWREx_EnableMainRegulatorLowVoltage
+ 263              		.syntax unified
+ 264              		.thumb
+ 265              		.thumb_func
+ 267              	HAL_PWREx_EnableMainRegulatorLowVoltage:
+ 268              		@ args = 0, pretend = 0, frame = 0
+ 269              		@ frame_needed = 0, uses_anonymous_args = 0
+ 270              		@ link register save eliminated.
+ 271 0000 014B     		ldr	r3, .L42
+ 272 0002 0122     		movs	r2, #1
+ 273 0004 DA62     		str	r2, [r3, #44]
+ 274 0006 7047     		bx	lr
+ 275              	.L43:
+ 276              		.align	2
+ 277              	.L42:
+ 278 0008 00000E42 		.word	1108213760
+ 280              		.section	.text.HAL_PWREx_DisableMainRegulatorLowVoltage,"ax",%progbits
+ 281              		.align	1
+ 282              		.p2align 2,,3
+ 283              		.global	HAL_PWREx_DisableMainRegulatorLowVoltage
+ 284              		.syntax unified
+ 285              		.thumb
+ 286              		.thumb_func
+ 288              	HAL_PWREx_DisableMainRegulatorLowVoltage:
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291              		@ link register save eliminated.
+ 292 0000 014B     		ldr	r3, .L45
+ 293 0002 0022     		movs	r2, #0
+ 294 0004 DA62     		str	r2, [r3, #44]
+ 295 0006 7047     		bx	lr
+ 296              	.L46:
+ 297              		.align	2
+ 298              	.L45:
+ 299 0008 00000E42 		.word	1108213760
+ 301              		.section	.text.HAL_PWREx_EnableLowRegulatorLowVoltage,"ax",%progbits
+ARM GAS  /tmp/ccLioEMv.s 			page 6
+
+
+ 302              		.align	1
+ 303              		.p2align 2,,3
+ 304              		.global	HAL_PWREx_EnableLowRegulatorLowVoltage
+ 305              		.syntax unified
+ 306              		.thumb
+ 307              		.thumb_func
+ 309              	HAL_PWREx_EnableLowRegulatorLowVoltage:
+ 310              		@ args = 0, pretend = 0, frame = 0
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+ 312              		@ link register save eliminated.
+ 313 0000 014B     		ldr	r3, .L48
+ 314 0002 0122     		movs	r2, #1
+ 315 0004 9A62     		str	r2, [r3, #40]
+ 316 0006 7047     		bx	lr
+ 317              	.L49:
+ 318              		.align	2
+ 319              	.L48:
+ 320 0008 00000E42 		.word	1108213760
+ 322              		.section	.text.HAL_PWREx_DisableLowRegulatorLowVoltage,"ax",%progbits
+ 323              		.align	1
+ 324              		.p2align 2,,3
+ 325              		.global	HAL_PWREx_DisableLowRegulatorLowVoltage
+ 326              		.syntax unified
+ 327              		.thumb
+ 328              		.thumb_func
+ 330              	HAL_PWREx_DisableLowRegulatorLowVoltage:
+ 331              		@ args = 0, pretend = 0, frame = 0
+ 332              		@ frame_needed = 0, uses_anonymous_args = 0
+ 333              		@ link register save eliminated.
+ 334 0000 014B     		ldr	r3, .L51
+ 335 0002 0022     		movs	r2, #0
+ 336 0004 9A62     		str	r2, [r3, #40]
+ 337 0006 7047     		bx	lr
+ 338              	.L52:
+ 339              		.align	2
+ 340              	.L51:
+ 341 0008 00000E42 		.word	1108213760
+ 343              		.ident	"GCC: (15:13.2.rel1-2) 13.2.1 20231009"
+ARM GAS  /tmp/ccLioEMv.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f4xx_hal_pwr_ex.c
+     /tmp/ccLioEMv.s:18     .text.HAL_PWREx_EnableBkUpReg:00000000 $t
+     /tmp/ccLioEMv.s:25     .text.HAL_PWREx_EnableBkUpReg:00000000 HAL_PWREx_EnableBkUpReg
+     /tmp/ccLioEMv.s:53     .text.HAL_PWREx_EnableBkUpReg:00000030 $d
+     /tmp/ccLioEMv.s:57     .text.HAL_PWREx_DisableBkUpReg:00000000 $t
+     /tmp/ccLioEMv.s:64     .text.HAL_PWREx_DisableBkUpReg:00000000 HAL_PWREx_DisableBkUpReg
+     /tmp/ccLioEMv.s:92     .text.HAL_PWREx_DisableBkUpReg:00000030 $d
+     /tmp/ccLioEMv.s:96     .text.HAL_PWREx_EnableFlashPowerDown:00000000 $t
+     /tmp/ccLioEMv.s:103    .text.HAL_PWREx_EnableFlashPowerDown:00000000 HAL_PWREx_EnableFlashPowerDown
+     /tmp/ccLioEMv.s:114    .text.HAL_PWREx_EnableFlashPowerDown:00000008 $d
+     /tmp/ccLioEMv.s:117    .text.HAL_PWREx_DisableFlashPowerDown:00000000 $t
+     /tmp/ccLioEMv.s:124    .text.HAL_PWREx_DisableFlashPowerDown:00000000 HAL_PWREx_DisableFlashPowerDown
+     /tmp/ccLioEMv.s:135    .text.HAL_PWREx_DisableFlashPowerDown:00000008 $d
+     /tmp/ccLioEMv.s:138    .text.HAL_PWREx_GetVoltageRange:00000000 $t
+     /tmp/ccLioEMv.s:145    .text.HAL_PWREx_GetVoltageRange:00000000 HAL_PWREx_GetVoltageRange
+     /tmp/ccLioEMv.s:156    .text.HAL_PWREx_GetVoltageRange:0000000c $d
+     /tmp/ccLioEMv.s:159    .text.HAL_PWREx_ControlVoltageScaling:00000000 $t
+     /tmp/ccLioEMv.s:166    .text.HAL_PWREx_ControlVoltageScaling:00000000 HAL_PWREx_ControlVoltageScaling
+     /tmp/ccLioEMv.s:255    .text.HAL_PWREx_ControlVoltageScaling:000000ac $d
+     /tmp/ccLioEMv.s:260    .text.HAL_PWREx_EnableMainRegulatorLowVoltage:00000000 $t
+     /tmp/ccLioEMv.s:267    .text.HAL_PWREx_EnableMainRegulatorLowVoltage:00000000 HAL_PWREx_EnableMainRegulatorLowVoltage
+     /tmp/ccLioEMv.s:278    .text.HAL_PWREx_EnableMainRegulatorLowVoltage:00000008 $d
+     /tmp/ccLioEMv.s:281    .text.HAL_PWREx_DisableMainRegulatorLowVoltage:00000000 $t
+     /tmp/ccLioEMv.s:288    .text.HAL_PWREx_DisableMainRegulatorLowVoltage:00000000 HAL_PWREx_DisableMainRegulatorLowVoltage
+     /tmp/ccLioEMv.s:299    .text.HAL_PWREx_DisableMainRegulatorLowVoltage:00000008 $d
+     /tmp/ccLioEMv.s:302    .text.HAL_PWREx_EnableLowRegulatorLowVoltage:00000000 $t
+     /tmp/ccLioEMv.s:309    .text.HAL_PWREx_EnableLowRegulatorLowVoltage:00000000 HAL_PWREx_EnableLowRegulatorLowVoltage
+     /tmp/ccLioEMv.s:320    .text.HAL_PWREx_EnableLowRegulatorLowVoltage:00000008 $d
+     /tmp/ccLioEMv.s:323    .text.HAL_PWREx_DisableLowRegulatorLowVoltage:00000000 $t
+     /tmp/ccLioEMv.s:330    .text.HAL_PWREx_DisableLowRegulatorLowVoltage:00000000 HAL_PWREx_DisableLowRegulatorLowVoltage
+     /tmp/ccLioEMv.s:341    .text.HAL_PWREx_DisableLowRegulatorLowVoltage:00000008 $d
+
+UNDEFINED SYMBOLS
+HAL_GetTick

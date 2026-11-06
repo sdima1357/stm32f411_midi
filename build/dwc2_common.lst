@@ -1,0 +1,446 @@
+ARM GAS  /tmp/ccNvukgi.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"dwc2_common.c"
+  16              		.text
+  17              		.section	.text.dwc2_core_is_highspeed_phy,"ax",%progbits
+  18              		.align	1
+  19              		.p2align 2,,3
+  20              		.global	dwc2_core_is_highspeed_phy
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  25              	dwc2_core_is_highspeed_phy:
+  26              		@ args = 0, pretend = 0, frame = 0
+  27              		@ frame_needed = 0, uses_anonymous_args = 0
+  28              		@ link register save eliminated.
+  29 0000 836C     		ldr	r3, [r0, #72]
+  30 0002 D8B2     		uxtb	r0, r3
+  31 0004 3F28     		cmp	r0, #63
+  32 0006 94BF     		ite	ls
+  33 0008 0020     		movls	r0, #0
+  34 000a 0120     		movhi	r0, #1
+  35 000c 19B9     		cbnz	r1, .L2
+  36 000e 13F4407F 		tst	r3, #768
+  37 0012 18BF     		it	ne
+  38 0014 0020     		movne	r0, #0
+  39              	.L2:
+  40 0016 7047     		bx	lr
+  42              		.section	.text.dwc2_core_init,"ax",%progbits
+  43              		.align	1
+  44              		.p2align 2,,3
+  45              		.global	dwc2_core_init
+  46              		.syntax unified
+  47              		.thumb
+  48              		.thumb_func
+  50              	dwc2_core_init:
+  51              		@ args = 0, pretend = 0, frame = 0
+  52              		@ frame_needed = 0, uses_anonymous_args = 0
+  53              		@ link register save eliminated.
+  54 0000 4FF0A043 		mov	r3, #1342177280
+  55 0004 9948     		ldr	r0, .L96
+  56 0006 1B6C     		ldr	r3, [r3, #64]
+  57 0008 6FF30F03 		bfc	r3, #0, #16
+  58 000c 8342     		cmp	r3, r0
+  59 000e 16D0     		beq	.L7
+  60 0010 9748     		ldr	r0, .L96+4
+ARM GAS  /tmp/ccNvukgi.s 			page 2
+
+
+  61 0012 8342     		cmp	r3, r0
+  62 0014 13D0     		beq	.L7
+  63 0016 00F58030 		add	r0, r0, #65536
+  64 001a 8342     		cmp	r3, r0
+  65 001c 0FD0     		beq	.L7
+  66 001e 4FF0E023 		mov	r3, #-536813568
+  67 0022 D3F8F03D 		ldr	r3, [r3, #3568]
+  68 0026 D907     		lsls	r1, r3, #31
+  69 0028 00D5     		bpl	.L8
+  70              		.syntax unified
+  71              	@ 158 "tinyusb/src/portable/synopsys/dwc2/dwc2_common.c" 1
+  72 002a 00BE     		BKPT #0
+  73              	
+  74              	@ 0 "" 2
+  75              		.thumb
+  76              		.syntax unified
+  77              	.L8:
+  78 002c 4FF0E023 		mov	r3, #-536813568
+  79 0030 D3F8F03D 		ldr	r3, [r3, #3568]
+  80 0034 DA07     		lsls	r2, r3, #31
+  81 0036 00D5     		bpl	.L9
+  82              		.syntax unified
+  83              	@ 184 "tinyusb/src/portable/synopsys/dwc2/dwc2_common.c" 1
+  84 0038 00BE     		BKPT #0
+  85              	
+  86              	@ 0 "" 2
+  87              		.thumb
+  88              		.syntax unified
+  89              	.L9:
+  90 003a 0020     		movs	r0, #0
+  91 003c 7047     		bx	lr
+  92              	.L7:
+  93 003e 4FF0A043 		mov	r3, #1342177280
+  94 0042 70B4     		push	{r4, r5, r6}
+  95 0044 9868     		ldr	r0, [r3, #8]
+  96 0046 20F00100 		bic	r0, r0, #1
+  97 004a 9860     		str	r0, [r3, #8]
+  98 004c D868     		ldr	r0, [r3, #12]
+  99 004e 0029     		cmp	r1, #0
+ 100 0050 65D1     		bne	.L94
+ 101 0052 40F04001 		orr	r1, r0, #64
+ 102 0056 D960     		str	r1, [r3, #12]
+ 103 0058 996B     		ldr	r1, [r3, #56]
+ 104 005a 41F48031 		orr	r1, r1, #65536
+ 105 005e 9963     		str	r1, [r3, #56]
+ 106              	.L26:
+ 107 0060 1969     		ldr	r1, [r3, #16]
+ 108 0062 0029     		cmp	r1, #0
+ 109 0064 FCDA     		bge	.L26
+ 110 0066 196C     		ldr	r1, [r3, #64]
+ 111 0068 1C69     		ldr	r4, [r3, #16]
+ 112 006a 44F00104 		orr	r4, r4, #1
+ 113 006e 89B2     		uxth	r1, r1
+ 114 0070 1C61     		str	r4, [r3, #16]
+ 115 0072 44F20923 		movw	r3, #16905
+ 116 0076 9942     		cmp	r1, r3
+ 117 0078 4FF0A041 		mov	r1, #1342177280
+ARM GAS  /tmp/ccNvukgi.s 			page 3
+
+
+ 118 007c 43D8     		bhi	.L27
+ 119              	.L28:
+ 120 007e 0B69     		ldr	r3, [r1, #16]
+ 121 0080 DD07     		lsls	r5, r3, #31
+ 122 0082 FCD4     		bmi	.L28
+ 123              	.L29:
+ 124 0084 4FF0A041 		mov	r1, #1342177280
+ 125              	.L30:
+ 126 0088 0B69     		ldr	r3, [r1, #16]
+ 127 008a 002B     		cmp	r3, #0
+ 128 008c FCDA     		bge	.L30
+ 129 008e 20F47053 		bic	r3, r0, #15360
+ 130 0092 43F4A253 		orr	r3, r3, #5184
+ 131 0096 7748     		ldr	r0, .L96+8
+ 132 0098 CB60     		str	r3, [r1, #12]
+ 133 009a 0368     		ldr	r3, [r0]
+ 134 009c 7649     		ldr	r1, .L96+12
+ 135 009e 8B42     		cmp	r3, r1
+ 136 00a0 C0F08680 		bcc	.L93
+ 137              	.L48:
+ 138 00a4 4FF4C051 		mov	r1, #6144
+ 139              	.L31:
+ 140 00a8 4FF0A040 		mov	r0, #1342177280
+ 141 00ac C368     		ldr	r3, [r0, #12]
+ 142 00ae 23F47053 		bic	r3, r3, #15360
+ 143 00b2 0B43     		orrs	r3, r3, r1
+ 144 00b4 C360     		str	r3, [r0, #12]
+ 145              	.L25:
+ 146 00b6 4FF0A041 		mov	r1, #1342177280
+ 147 00ba 4FF48460 		mov	r0, #1056
+ 148 00be CB68     		ldr	r3, [r1, #12]
+ 149 00c0 43F00703 		orr	r3, r3, #7
+ 150 00c4 CB60     		str	r3, [r1, #12]
+ 151 00c6 D1F8003E 		ldr	r3, [r1, #3584]
+ 152 00ca 23F00F03 		bic	r3, r3, #15
+ 153 00ce C1F8003E 		str	r3, [r1, #3584]
+ 154 00d2 0861     		str	r0, [r1, #16]
+ 155              	.L32:
+ 156 00d4 0B69     		ldr	r3, [r1, #16]
+ 157 00d6 9B06     		lsls	r3, r3, #26
+ 158 00d8 FCD4     		bmi	.L32
+ 159 00da 1023     		movs	r3, #16
+ 160 00dc 0B61     		str	r3, [r1, #16]
+ 161 00de 4FF0A041 		mov	r1, #1342177280
+ 162              	.L33:
+ 163 00e2 0B69     		ldr	r3, [r1, #16]
+ 164 00e4 13F01003 		ands	r3, r3, #16
+ 165 00e8 FBD1     		bne	.L33
+ 166 00ea 4FF0FF30 		mov	r0, #-1
+ 167 00ee 4861     		str	r0, [r1, #20]
+ 168 00f0 4860     		str	r0, [r1, #4]
+ 169 00f2 8B61     		str	r3, [r1, #24]
+ 170 00f4 002A     		cmp	r2, #0
+ 171 00f6 7ED0     		beq	.L34
+ 172 00f8 8B68     		ldr	r3, [r1, #8]
+ 173 00fa 43F02603 		orr	r3, r3, #38
+ 174 00fe 0120     		movs	r0, #1
+ARM GAS  /tmp/ccNvukgi.s 			page 4
+
+
+ 175 0100 70BC     		pop	{r4, r5, r6}
+ 176 0102 8B60     		str	r3, [r1, #8]
+ 177 0104 7047     		bx	lr
+ 178              	.L27:
+ 179 0106 0B69     		ldr	r3, [r1, #16]
+ 180 0108 9C00     		lsls	r4, r3, #2
+ 181 010a FCD5     		bpl	.L27
+ 182 010c 0B69     		ldr	r3, [r1, #16]
+ 183 010e 23F00053 		bic	r3, r3, #536870912
+ 184 0112 23F00103 		bic	r3, r3, #1
+ 185 0116 43F00053 		orr	r3, r3, #536870912
+ 186 011a 0B61     		str	r3, [r1, #16]
+ 187 011c B2E7     		b	.L29
+ 188              	.L94:
+ 189 011e 996C     		ldr	r1, [r3, #72]
+ 190 0120 1B6D     		ldr	r3, [r3, #80]
+ 191 0122 C3F30723 		ubfx	r3, r3, #8, #8
+ 192 0126 3F2B     		cmp	r3, #63
+ 193 0128 01F0C003 		and	r3, r1, #192
+ 194 012c 76D8     		bhi	.L95
+ 195 012e 802B     		cmp	r3, #128
+ 196 0130 00F08A80 		beq	.L37
+ 197 0134 20F05800 		bic	r0, r0, #88
+ 198 0138 0824     		movs	r4, #8
+ 199              	.L14:
+ 200 013a 4FF0A043 		mov	r3, #1342177280
+ 201 013e 11F0C00F 		tst	r1, #192
+ 202 0142 D860     		str	r0, [r3, #12]
+ 203 0144 C1F38115 		ubfx	r5, r1, #6, #2
+ 204 0148 996B     		ldr	r1, [r3, #56]
+ 205 014a 0CBF     		ite	eq
+ 206 014c 41F48031 		orreq	r1, r1, #65536
+ 207 0150 21F48031 		bicne	r1, r1, #65536
+ 208 0154 9963     		str	r1, [r3, #56]
+ 209 0156 4FF0A041 		mov	r1, #1342177280
+ 210              	.L17:
+ 211 015a 0B69     		ldr	r3, [r1, #16]
+ 212 015c 002B     		cmp	r3, #0
+ 213 015e FCDA     		bge	.L17
+ 214 0160 0B6C     		ldr	r3, [r1, #64]
+ 215 0162 0E69     		ldr	r6, [r1, #16]
+ 216 0164 46F00106 		orr	r6, r6, #1
+ 217 0168 9BB2     		uxth	r3, r3
+ 218 016a 0E61     		str	r6, [r1, #16]
+ 219 016c 44F20921 		movw	r1, #16905
+ 220 0170 8B42     		cmp	r3, r1
+ 221 0172 4FF0A041 		mov	r1, #1342177280
+ 222 0176 45D8     		bhi	.L18
+ 223              	.L19:
+ 224 0178 0B69     		ldr	r3, [r1, #16]
+ 225 017a DB07     		lsls	r3, r3, #31
+ 226 017c FCD4     		bmi	.L19
+ 227              	.L20:
+ 228 017e 4FF0A041 		mov	r1, #1342177280
+ 229              	.L21:
+ 230 0182 0B69     		ldr	r3, [r1, #16]
+ 231 0184 002B     		cmp	r3, #0
+ARM GAS  /tmp/ccNvukgi.s 			page 5
+
+
+ 232 0186 FCDA     		bge	.L21
+ 233 0188 102C     		cmp	r4, #16
+ 234 018a 20F47050 		bic	r0, r0, #15360
+ 235 018e 14BF     		ite	ne
+ 236 0190 4FF41051 		movne	r1, #9216
+ 237 0194 4FF4A051 		moveq	r1, #5120
+ 238 0198 4FF0A043 		mov	r3, #1342177280
+ 239 019c 0843     		orrs	r0, r0, r1
+ 240 019e D860     		str	r0, [r3, #12]
+ 241 01a0 002D     		cmp	r5, #0
+ 242 01a2 88D1     		bne	.L25
+ 243 01a4 334B     		ldr	r3, .L96+8
+ 244 01a6 3449     		ldr	r1, .L96+12
+ 245 01a8 1B68     		ldr	r3, [r3]
+ 246 01aa 8B42     		cmp	r3, r1
+ 247 01ac BFF47AAF 		bcs	.L48
+ 248              	.L93:
+ 249 01b0 3249     		ldr	r1, .L96+16
+ 250 01b2 8B42     		cmp	r3, r1
+ 251 01b4 3AD8     		bhi	.L49
+ 252 01b6 3249     		ldr	r1, .L96+20
+ 253 01b8 8B42     		cmp	r3, r1
+ 254 01ba 3AD2     		bcs	.L50
+ 255 01bc 3149     		ldr	r1, .L96+24
+ 256 01be 8B42     		cmp	r3, r1
+ 257 01c0 44D8     		bhi	.L51
+ 258 01c2 A1F5DB11 		sub	r1, r1, #1794048
+ 259 01c6 A1F5BA51 		sub	r1, r1, #5952
+ 260 01ca 8B42     		cmp	r3, r1
+ 261 01cc 41D8     		bhi	.L52
+ 262 01ce A1F5B711 		sub	r1, r1, #1499136
+ 263 01d2 A1F55871 		sub	r1, r1, #864
+ 264 01d6 8B42     		cmp	r3, r1
+ 265 01d8 3ED8     		bhi	.L53
+ 266 01da 2B49     		ldr	r1, .L96+28
+ 267 01dc 8B42     		cmp	r3, r1
+ 268 01de 3ED2     		bcs	.L54
+ 269 01e0 2A49     		ldr	r1, .L96+32
+ 270 01e2 8B42     		cmp	r3, r1
+ 271 01e4 3ED2     		bcs	.L55
+ 272 01e6 2A49     		ldr	r1, .L96+36
+ 273 01e8 8B42     		cmp	r3, r1
+ 274 01ea 34BF     		ite	cc
+ 275 01ec 4FF47051 		movcc	r1, #15360
+ 276 01f0 4FF46051 		movcs	r1, #14336
+ 277 01f4 58E7     		b	.L31
+ 278              	.L34:
+ 279 01f6 8B69     		ldr	r3, [r1, #24]
+ 280 01f8 43F01003 		orr	r3, r3, #16
+ 281 01fc 0120     		movs	r0, #1
+ 282 01fe 70BC     		pop	{r4, r5, r6}
+ 283 0200 8B61     		str	r3, [r1, #24]
+ 284 0202 7047     		bx	lr
+ 285              	.L18:
+ 286 0204 0B69     		ldr	r3, [r1, #16]
+ 287 0206 9E00     		lsls	r6, r3, #2
+ 288 0208 FCD5     		bpl	.L18
+ARM GAS  /tmp/ccNvukgi.s 			page 6
+
+
+ 289 020a 0B69     		ldr	r3, [r1, #16]
+ 290 020c 23F00053 		bic	r3, r3, #536870912
+ 291 0210 23F00103 		bic	r3, r3, #1
+ 292 0214 43F00053 		orr	r3, r3, #536870912
+ 293 0218 0B61     		str	r3, [r1, #16]
+ 294 021a B0E7     		b	.L20
+ 295              	.L95:
+ 296 021c 802B     		cmp	r3, #128
+ 297 021e 0BD0     		beq	.L36
+ 298 0220 20F05000 		bic	r0, r0, #80
+ 299 0224 40F00800 		orr	r0, r0, #8
+ 300 0228 1024     		movs	r4, #16
+ 301 022a 86E7     		b	.L14
+ 302              	.L49:
+ 303 022c 4FF4E051 		mov	r1, #7168
+ 304 0230 3AE7     		b	.L31
+ 305              	.L50:
+ 306 0232 4FF40051 		mov	r1, #8192
+ 307 0236 37E7     		b	.L31
+ 308              	.L36:
+ 309 0238 1024     		movs	r4, #16
+ 310              	.L13:
+ 311 023a 20F46810 		bic	r0, r0, #3801088
+ 312 023e 20F0C800 		bic	r0, r0, #200
+ 313 0242 40F01000 		orr	r0, r0, #16
+ 314 0246 78E7     		b	.L14
+ 315              	.L37:
+ 316 0248 0824     		movs	r4, #8
+ 317 024a F6E7     		b	.L13
+ 318              	.L51:
+ 319 024c 4FF41051 		mov	r1, #9216
+ 320 0250 2AE7     		b	.L31
+ 321              	.L52:
+ 322 0252 4FF42051 		mov	r1, #10240
+ 323 0256 27E7     		b	.L31
+ 324              	.L53:
+ 325 0258 4FF43051 		mov	r1, #11264
+ 326 025c 24E7     		b	.L31
+ 327              	.L54:
+ 328 025e 4FF44051 		mov	r1, #12288
+ 329 0262 21E7     		b	.L31
+ 330              	.L55:
+ 331 0264 4FF45051 		mov	r1, #13312
+ 332 0268 1EE7     		b	.L31
+ 333              	.L97:
+ 334 026a 00BF     		.align	2
+ 335              	.L96:
+ 336 026c 0000544F 		.word	1330905088
+ 337 0270 00003155 		.word	1429274624
+ 338 0274 00000000 		.word	SystemCoreClock
+ 339 0278 0048E801 		.word	32000000
+ 340 027c DF9DA301 		.word	27499999
+ 341 0280 00366E01 		.word	24000000
+ 342 0284 3FA44C01 		.word	21799999
+ 343 0288 80730601 		.word	17200000
+ 344 028c 0024F400 		.word	16000000
+ 345 0290 C0E1E400 		.word	15000000
+ARM GAS  /tmp/ccNvukgi.s 			page 7
+
+
+ 347              		.section	.text.dwc2_core_deinit,"ax",%progbits
+ 348              		.align	1
+ 349              		.p2align 2,,3
+ 350              		.global	dwc2_core_deinit
+ 351              		.syntax unified
+ 352              		.thumb
+ 353              		.thumb_func
+ 355              	dwc2_core_deinit:
+ 356              		@ args = 0, pretend = 0, frame = 0
+ 357              		@ frame_needed = 0, uses_anonymous_args = 0
+ 358              		@ link register save eliminated.
+ 359 0000 4FF0A042 		mov	r2, #1342177280
+ 360 0004 9368     		ldr	r3, [r2, #8]
+ 361 0006 23F00103 		bic	r3, r3, #1
+ 362 000a 9360     		str	r3, [r2, #8]
+ 363              	.L99:
+ 364 000c 1369     		ldr	r3, [r2, #16]
+ 365 000e 002B     		cmp	r3, #0
+ 366 0010 FCDA     		bge	.L99
+ 367 0012 136C     		ldr	r3, [r2, #64]
+ 368 0014 1169     		ldr	r1, [r2, #16]
+ 369 0016 9BB2     		uxth	r3, r3
+ 370 0018 44F20920 		movw	r0, #16905
+ 371 001c 41F00101 		orr	r1, r1, #1
+ 372 0020 8342     		cmp	r3, r0
+ 373 0022 1161     		str	r1, [r2, #16]
+ 374 0024 4FF0A042 		mov	r2, #1342177280
+ 375 0028 1BD8     		bhi	.L100
+ 376              	.L101:
+ 377 002a 1369     		ldr	r3, [r2, #16]
+ 378 002c D807     		lsls	r0, r3, #31
+ 379 002e FCD4     		bmi	.L101
+ 380              	.L102:
+ 381 0030 4FF0A042 		mov	r2, #1342177280
+ 382              	.L103:
+ 383 0034 1369     		ldr	r3, [r2, #16]
+ 384 0036 002B     		cmp	r3, #0
+ 385 0038 FCDA     		bge	.L103
+ 386 003a D2F8003E 		ldr	r3, [r2, #3584]
+ 387 003e 43F00303 		orr	r3, r3, #3
+ 388 0042 C2F8003E 		str	r3, [r2, #3584]
+ 389 0046 916C     		ldr	r1, [r2, #72]
+ 390 0048 D368     		ldr	r3, [r2, #12]
+ 391 004a 5B06     		lsls	r3, r3, #25
+ 392 004c 02D4     		bmi	.L104
+ 393 004e 11F0C00F 		tst	r1, #192
+ 394 0052 05D1     		bne	.L98
+ 395              	.L104:
+ 396 0054 4FF0A042 		mov	r2, #1342177280
+ 397 0058 936B     		ldr	r3, [r2, #56]
+ 398 005a 23F48033 		bic	r3, r3, #65536
+ 399 005e 9363     		str	r3, [r2, #56]
+ 400              	.L98:
+ 401 0060 7047     		bx	lr
+ 402              	.L100:
+ 403 0062 1369     		ldr	r3, [r2, #16]
+ 404 0064 9900     		lsls	r1, r3, #2
+ARM GAS  /tmp/ccNvukgi.s 			page 8
+
+
+ 405 0066 FCD5     		bpl	.L100
+ 406 0068 1369     		ldr	r3, [r2, #16]
+ 407 006a 23F00053 		bic	r3, r3, #536870912
+ 408 006e 23F00103 		bic	r3, r3, #1
+ 409 0072 43F00053 		orr	r3, r3, #536870912
+ 410 0076 1361     		str	r3, [r2, #16]
+ 411 0078 DAE7     		b	.L102
+ 413 007a 00BF     		.ident	"GCC: (15:13.2.rel1-2) 13.2.1 20231009"
+ARM GAS  /tmp/ccNvukgi.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 dwc2_common.c
+     /tmp/ccNvukgi.s:18     .text.dwc2_core_is_highspeed_phy:00000000 $t
+     /tmp/ccNvukgi.s:25     .text.dwc2_core_is_highspeed_phy:00000000 dwc2_core_is_highspeed_phy
+     /tmp/ccNvukgi.s:43     .text.dwc2_core_init:00000000 $t
+     /tmp/ccNvukgi.s:50     .text.dwc2_core_init:00000000 dwc2_core_init
+     /tmp/ccNvukgi.s:336    .text.dwc2_core_init:0000026c $d
+     /tmp/ccNvukgi.s:348    .text.dwc2_core_deinit:00000000 $t
+     /tmp/ccNvukgi.s:355    .text.dwc2_core_deinit:00000000 dwc2_core_deinit
+
+UNDEFINED SYMBOLS
+SystemCoreClock
